@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+	android:orientation="vertical">
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical"
+			android:orientation="horizontal"
+			android:paddingLeft="16dp"
+			android:paddingRight="16dp">
+			<TextView
+					android:id="@+id/playing_time"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="00:00"
+					android:textColor="@color/white"
+					android:textSize="16sp"/>
+			<SeekBar
+					android:id="@+id/seekbar"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:maxHeight="2dp"
+					android:minHeight="2dp"
+					android:progressDrawable="@drawable/seekbar_progress_style"/>
+					<!--android:thumb="@drawable/seekbar_progress_btn"-->
+			<TextView
+					android:id="@+id/song_time"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="00:00"
+					android:textColor="@color/white_50p"
+					android:textSize="16sp"/>
+	</LinearLayout>
+	<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<ImageView
+					android:id="@+id/play_mode"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:src="@drawable/play_mode_level_list"/>
+					
+				<ImageView
+					android:id="@+id/play_prev"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_toStartOf="@+id/play"
+					android:src="@drawable/play_btn_prev"/>
+				<ImageView
+					android:id="@+id/play"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:src="@drawable/play_btn_play"/>
+				<ImageView
+					android:id="@+id/play_next"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:src="@drawable/play_btn_next"/>
+	</RelativeLayout>
+	</LinearLayout>
+				
+					
+					
+					
+			

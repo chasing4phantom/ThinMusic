@@ -1,9 +1,12 @@
-package com.example.zhang.thinmusic;
+package com.example.zhang.thinmusic.utils;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+
+import com.example.zhang.thinmusic.Mp3Info;
+import com.example.zhang.thinmusic.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

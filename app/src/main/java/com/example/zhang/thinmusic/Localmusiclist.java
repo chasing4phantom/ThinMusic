@@ -39,6 +39,8 @@ public class Localmusiclist extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(Localmusiclist.this,MusicPlayerActivity.class);
                 intent.putExtra("url",mp3Info.getUrl());
+                intent.putExtra("title",mp3Info.getTitle());
+                intent.putExtra("artist",mp3Info.getArtist());
                 startActivity(intent);
             }
         });

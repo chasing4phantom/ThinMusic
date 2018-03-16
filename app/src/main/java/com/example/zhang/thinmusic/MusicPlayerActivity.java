@@ -17,46 +17,55 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
+
+
 /**
  * Created by zhang on 2018/2/13.
  */
 
 public class MusicPlayerActivity extends Activity implements View.OnClickListener {
-    private Button playorpause_btn;
+    private ImageView playorpause_btn,play_prev,play_next;
     private ImageView imageView;
 
-    public String url;
+    public String url,title1,artist1;
     private MusicPlayService.MusicPlayerBinder mBinder;
 
     private Handler mHandler = new Handler();
-    private TextView playing_time,max_time;
+    private TextView playing_time,max_time,title,artist;
     private SeekBar seekBar;
     private SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
+    private int flag = 4;
     Intent MediaServiceIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playing);
+        setContentView(R.layout.fragment_playing);
         findView();
-        bindButton();
+        setListener();
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
-
+        title1 = intent.getStringExtra("title");
+        artist1 = intent.getStringExtra("artist");
         MediaServiceIntent = new Intent(this,MusicPlayService.class);
         bindService(MediaServiceIntent, mServiceConnection,BIND_AUTO_CREATE);
     }
     public void findView(){
-        playorpause_btn=(Button)findViewById(R.id.play_pause);
-
+        title = (TextView)findViewById(R.id.title);
+        artist = (TextView)findViewById(R.id.artist);
+        playorpause_btn = (ImageView)findViewById(R.id.play);
+        play_prev = (ImageView)findViewById(R.id.play_prev);
+        play_next = (ImageView)findViewById(R.id.play_next);
         playing_time = (TextView)findViewById(R.id.playing_time);
         max_time = (TextView)findViewById(R.id.song_time);
-        seekBar = (SeekBar)findViewById(R.id.seekbar);
+        seekBar = (SeekBar)findViewById(R.id.seekbar_progress);
         imageView=(ImageView)findViewById(R.id.imageview);
     }
-    private void bindButton(){
+    private void setListener(){
         playorpause_btn.setOnClickListener(this);
+        play_prev.setOnClickListener(this);
+        play_next.setOnClickListener(this);
 
     }
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -65,6 +74,8 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
             mBinder = (MusicPlayService.MusicPlayerBinder) service;
             mBinder.getUrl(url);
             mBinder.start();
+            title.setText(title1);
+            artist.setText(artist1);
             seekBar.setMax(mBinder.getProgress());
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -94,9 +105,9 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
         }
     };
     @Override
-    public void onClick(View view){
+    /*public void onClick(View view){
         switch (view.getId()){
-            case R.id.play_pause:
+            case R.id.play:
             {
                 if(Objects.equals(playorpause_btn.getText().toString(), "暂停"))
                 {
@@ -109,6 +120,20 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
                 }
             }
             break;
+        }
+    }*/
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.play:
+                if(flag == Constant.isPlaying) {
+                    mBinder.play();
+                    flag = Constant.isPause;
+                }else
+                    if(flag == Constant.isPause) {
+                    mBinder.pause();
+                    flag = Constant.isPlaying;
+                    }
+                break;
         }
     }
 
@@ -129,4 +154,6 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
             mHandler.postDelayed(mRunnable,1000);
         }
     };//更新进度条ui
+
+
 }

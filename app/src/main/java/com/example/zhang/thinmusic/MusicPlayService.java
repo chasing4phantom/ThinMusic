@@ -30,6 +30,8 @@ public class MusicPlayService extends Service {
             initMusicPlayer(url);
             mediaPlayer.start();}
         }
+
+
         public void play(){
             if(!mediaPlayer.isPlaying()) {
                /* mediaPlayer.reset();
@@ -59,6 +61,7 @@ public class MusicPlayService extends Service {
             MusicPlayService.this.url = url;
 
         }
+
         public int getProgress(){
             return mediaPlayer.getDuration();
         }

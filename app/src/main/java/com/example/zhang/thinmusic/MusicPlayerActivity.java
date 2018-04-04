@@ -4,15 +4,22 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.example.zhang.thinmusic.utils.ScreenUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -36,11 +43,22 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
     private SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
     private int flag = 4;
+    private LinearLayout llContent;
     Intent MediaServiceIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+
+        }
         super.onCreate(savedInstanceState);
+       /* initSystemBar();*/
         setContentView(R.layout.fragment_playing);
         findView();
         setListener();
@@ -61,6 +79,8 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
         max_time = (TextView)findViewById(R.id.song_time);
         seekBar = (SeekBar)findViewById(R.id.seekbar_progress);
         imageView=(ImageView)findViewById(R.id.imageview);
+        llContent = (LinearLayout)findViewById(R.id.content);
+
     }
     private void setListener(){
         playorpause_btn.setOnClickListener(this);
@@ -68,6 +88,12 @@ public class MusicPlayerActivity extends Activity implements View.OnClickListene
         play_next.setOnClickListener(this);
 
     }
+   /* private void initSystemBar(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            int top = ScreenUtils.getStatusBarHeight();
+            llContent.setPadding(0,top,0,0);
+        }
+    }*/
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {

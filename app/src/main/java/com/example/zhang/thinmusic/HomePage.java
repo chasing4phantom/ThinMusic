@@ -1,3 +1,4 @@
+/*
 package com.example.zhang.thinmusic;
 
 import android.Manifest;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.zhang.thinmusic.activity.PlaylistActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,9 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         initnavigation();
+        if(isGrantExternalRW(HomePage.this) != true){
+            return;
+        }
         navigationadapter adapter = new navigationadapter(HomePage.this,R.layout.navigation_item,
                 navigationsList);
         ListView listView = (ListView) findViewById(R.id.list_view);
@@ -33,12 +39,13 @@ public class HomePage extends AppCompatActivity {
                     case 0:
                     {
 
-                        Intent intent = new Intent(HomePage.this,Localmusiclist.class);
+                        Intent intent = new Intent(HomePage.this,PlaylistActivity.class);
                         startActivity(intent);
 
                    }
                     break;
-                    /*case 1:
+                    */
+/*case 1:
                     {
                         Intent intent1 = new Intent(HomePage.this, Download.class);
                     startActivities(intent1);
@@ -55,7 +62,8 @@ public class HomePage extends AppCompatActivity {
                         Intent intent3 = new Intent(HomePage.this, Favourite.class);
                         startActivities(intent3);
                     }
-                    break;*/
+                    break;*//*
+
                     default:
                         break;
                 }
@@ -72,6 +80,17 @@ public class HomePage extends AppCompatActivity {
         navigation favourite = new navigation("我喜欢的音乐",R.drawable.favourite);
         navigationsList.add(favourite);
     }
+    */
+/*获得读取权限*//*
 
+    public  static  boolean isGrantExternalRW(Activity activity){
+        if(activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            activity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+            return  false;
+        }
+        return  true;
+    }
 }
 
+*/

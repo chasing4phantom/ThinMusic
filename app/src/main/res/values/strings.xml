@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">ThinMusic</string>
     <string name="play_time_start">00:00</string>
+    <string name="local_music">我的音乐</string>
+    <string name="favourite_music">我喜欢的</string>
+    <string name="setting_key_filter_size">filter_size</string>
+    <string name="setting_key_filter_time">filter_time</string>
+
 </resources>

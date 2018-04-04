@@ -1,43 +1,45 @@
-/*
 package com.example.zhang.thinmusic.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.SimpleAdapter;
+import android.support.v4.app.Fragment;
 
-import java.util.logging.Handler;
-
-*/
-/**
- * fragment基类
- * Created by zhang on 2018/3/15.
- *//*
+import com.example.zhang.thinmusic.utils.PermissionReq;
+import com.example.zhang.thinmusic.utils.ViewBinder;
 
 
 public abstract class BaseFragment extends Fragment {
     protected Handler handler;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
-        ViewBinder
+        ViewBinder.bind(this, getView());
+
     }
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         setListener();
     }
 
-    protected  void setListener(){
-
+    protected void setListener() {
     }
 
     @Override
-    public void onDestroy(){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionReq.onRequsetPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onDestroy() {
+
         super.onDestroy();
     }
 }
-*/

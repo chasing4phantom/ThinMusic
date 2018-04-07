@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.Preferences;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
 import com.example.zhang.thinmusic.utils.ToastUtils;
@@ -37,6 +38,7 @@ public class AppCache {
         ToastUtils.init(context);
         Preferences.init(context);
         ScreenUtils.init(context);
+        CoverLoader.get().init(context);
         application.registerActivityLifecycleCallbacks(new ActivityLifecycle());
     }
     public Context getContext(){return  context;}

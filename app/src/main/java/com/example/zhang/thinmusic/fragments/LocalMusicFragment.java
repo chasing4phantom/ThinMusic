@@ -31,7 +31,7 @@ import java.util.List;
  * Created by zhang on 2018/3/25.
  */
 
-public class LocalMusicFragment extends BaseFragment implements AdapterView.OnItemClickListener,OnMoreClickListener{
+public class LocalMusicFragment extends BaseFragment implements AdapterView.OnItemClickListener, OnMoreClickListener{
     @Bind(R.id.local_music)
     private ListView LocalMusic;
 

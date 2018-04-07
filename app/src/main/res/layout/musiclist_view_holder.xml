@@ -12,13 +12,20 @@
         android:background="@color/red"
         android:contentDescription="@null"
         android:visibility="invisible"/>
-    <TextView
-        android:id="@+id/number"
-        style="@style/AppTheme.Text"
+    <ImageView
+        android:id="@+id/cover"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-       />
+        android:scaleType="fitXY"
+        android:src="@drawable/default_cover"/>
+<!--    <TextView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/number"
+        android:textSize="20sp"/>-->
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -54,7 +61,7 @@
                     android:singleLine="true"
                     android:text="歌手 — 专辑"
                     android:textColor="@color/grey"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <ImageView

@@ -55,7 +55,7 @@ public class MusicUtils {
                     return musicList;
                 }
 
-
+                int i =0;
                 while(cursor.moveToNext()){
 /*                    int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
                     if(isMusic ==0){
@@ -82,6 +82,10 @@ public class MusicUtils {
                  music.setPath(path);
                  music.setFileName(fileName);
                  music.setFileSize(fileSize);
+                 if(++i <musicList.size()){
+                     CoverLoader.get().loadThumb(music);
+                 }
+
                  musicList.add(music);
                 }
                 cursor.close();

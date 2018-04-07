@@ -14,13 +14,13 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-<!--        <ImageView
+        <ImageView
             android:id="@+id/play_bar_cover"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:contentDescription="@null"
             android:scaleType="fitXY"
-            android:src="@drawable/default_cover" -->/>
+            android:src="@drawable/default_cover" />
 
         <LinearLayout
             android:layout_width="0dp"

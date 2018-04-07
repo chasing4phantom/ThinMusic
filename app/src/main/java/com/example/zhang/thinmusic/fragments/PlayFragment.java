@@ -23,13 +23,17 @@ import android.widget.TextView;
 import com.example.zhang.thinmusic.MusicPlayService;
 import com.example.zhang.thinmusic.PlayModeEnum;
 import com.example.zhang.thinmusic.R;
+import com.example.zhang.thinmusic.adapter.PlaypageAdapter;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
+import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.Preferences;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
 import com.example.zhang.thinmusic.utils.SystemUtils;
+import com.example.zhang.thinmusic.widget.AlbumCover;
+import com.example.zhang.thinmusic.widget.IndicatorLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +59,8 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private TextView artist;
     @Bind(R.id.play_page)
     private ViewPager play_page;
-/*    @Bind(R.id.il_indicator)
-    private IndicatorLayout ilIndicator;*/
+    @Bind(R.id.il_indicator)
+    private IndicatorLayout ilIndicator;
     @Bind(R.id.seekbar_progress)
     private SeekBar seekBar;
     @Bind(R.id.playing_time)
@@ -71,6 +75,9 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private ImageView play_prev;
     @Bind(R.id.play_next)
     private ImageView  play_next;
+    private AlbumCover mAlbumCoverView;
+    /*private LrcView mLrcViewSingle;
+    private LrcView mLrcViewFull;*/
 
     private AudioManager audioManager;
     private List<View>  ViewPagerContent;
@@ -90,6 +97,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
 
         initSystemBar();
         initViewPager();
+        ilIndicator.create(ViewPagerContent.size());
         initPlayMode();
         onChangeImp1(AudioPlayer.get().getPlayMusic());
         AudioPlayer.get().addOnPlayListener(this);
@@ -120,11 +128,14 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initViewPager(){
-        /*View coverView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_pagecover, null);
+        View coverView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_pagecover, null);
 
-        ViewPagerContent = new ArrayList<>(2);
-        ViewPagerContent.add(coverView);*/
-        //play_page.setAdapter(new PlayPagerAdapter(ViewPagerContent));
+        mAlbumCoverView = coverView.findViewById(R.id.album_cover_view);
+        mAlbumCoverView.initNeedle(AudioPlayer.get().isPlaying());
+
+        ViewPagerContent = new ArrayList<>(1);
+        ViewPagerContent.add(coverView);
+        play_page.setAdapter(new PlaypageAdapter(ViewPagerContent));
     }
     private void initPlayMode(){
         int play_mode = Preferences.getPlayMode();
@@ -136,12 +147,12 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onPlayerStart(){
         playorpause_btn.setSelected(true);
-        //AlbumCoverView.start();
+        mAlbumCoverView.start();
     }
     @Override
     public void onPlayerPause(){
         playorpause_btn.setSelected(false);
-        //AlbumCoverView.pause();
+        mAlbumCoverView.pause();
     }
 
     @Override
@@ -184,7 +195,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void onPageSelected(int position){/*ilIndicator.setCurrent(position);*/}
+    public void onPageSelected(int position){ilIndicator.setCurrent(position);}
     @Override
     public void onPageScrollStateChanged(int state){}
 
@@ -241,14 +252,14 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         lastProgress = 0;
         playing_time.setText("00:00");
         max_time.setText(formatTime(music.getDuration()));
-        /*setCoverAndBg(music);
-        setLrc();*/
+        setCoverAndBg(music);
+        //setLrc();
         if(AudioPlayer.get().isPlaying() || AudioPlayer.get().isPreparing()){
             playorpause_btn.setSelected(true);
-            //AlbumCoverView.start();
+            mAlbumCoverView.start();
         }else{
             playorpause_btn.setSelected(false);
-           // AlbumCoverView.pause();
+            mAlbumCoverView.pause();
         }
     }
 
@@ -282,9 +293,11 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         handler.postDelayed(()->back.setEnabled(true),300);
     }
 
-/*    private void setCoverAndBg(Music music){
+    private void setCoverAndBg(Music music){
+        mAlbumCoverView.setCoverBitmap(CoverLoader.get().loadRound(music));
+        PlayingBackground.setImageBitmap(CoverLoader.get().loadBlur(music));
 
-    }*/
+    }
     private String formatTime(long time){
         return SystemUtils.formatTime("mm:ss",time);
     }

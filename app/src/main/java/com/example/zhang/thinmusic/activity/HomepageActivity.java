@@ -56,6 +56,9 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+        if(isGrantExternalRW(HomepageActivity.this) != true){
+            return;
+        }
         setContentView(R.layout.activity_music);
     }
 
@@ -158,7 +161,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
 
     private void hidePlayingFragment(){
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(0,R.anim.fragment_slide_up);
+        ft.setCustomAnimations(0,R.anim.fragment_slide_down);
         ft.hide(playFragment);
         ft.commitAllowingStateLoss();
         isPlayFragmentShow = false;

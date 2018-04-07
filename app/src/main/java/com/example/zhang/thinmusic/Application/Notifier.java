@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -14,6 +15,7 @@ import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.receiver.StatusBarReceiver;
 import com.example.zhang.thinmusic.service.PlayService;
+import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.FileUtils;
 
 /**
@@ -74,9 +76,14 @@ public class Notifier {
     private RemoteViews getRemoteViews(Context context,Music music,boolean isPlaying){
         String title = music.getTitle();
         String subtitle = FileUtils.getArtistAndAlbum(music.getArtist(),music.getAlbum());
+        Bitmap cover = CoverLoader.get().loadThumb(music);
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.notification);
-
+            if(cover!=null){
+                remoteViews.setImageViewBitmap(R.id.iv_icon,cover);
+                }else{
+                remoteViews.setImageViewResource(R.id.iv_icon,R.drawable.ic_launcher_background);
+            }
         remoteViews.setTextViewText(R.id.tv_title, title);
         remoteViews.setTextViewText(R.id.tv_subtitle, subtitle);
 

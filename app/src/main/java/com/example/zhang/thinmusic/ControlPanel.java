@@ -2,6 +2,7 @@ package com.example.zhang.thinmusic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -12,6 +13,7 @@ import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
+import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.ViewBinder;
 
 import org.w3c.dom.Text;
@@ -22,8 +24,8 @@ import org.w3c.dom.Text;
  */
 
 public class ControlPanel implements View.OnClickListener,OnPlayerListener {
-   /* @Bind(R.id.play_bar_cover)
-    private ImageView playbarcover;*/
+    @Bind(R.id.play_bar_cover)
+    private ImageView playbarcover;
     @Bind(R.id.play_bar_title)
     private TextView playbartitle;
     @Bind(R.id.play_bar_artist)
@@ -67,6 +69,8 @@ public class ControlPanel implements View.OnClickListener,OnPlayerListener {
         if(music == null){
             return;
         }
+        Bitmap cover = CoverLoader.get().loadThumb(music);
+        playbarcover.setImageBitmap(cover);
         playbarartist.setText(music.getArtist());
         playbartitle.setText(music.getTitle());
         playbarplay.setSelected(AudioPlayer.get().isPlaying() || AudioPlayer.get().isPreparing());

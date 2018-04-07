@@ -13,6 +13,7 @@ import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
+import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.FileUtils;
 import com.example.zhang.thinmusic.utils.ViewBinder;
 
@@ -27,7 +28,6 @@ public class PlaylistAdapter extends BaseAdapter{
     private List<Music> musicList;
     private OnMoreClickListener listener;
     private boolean isPlaylist;
-
     public PlaylistAdapter(List<Music> musicList){this.musicList = musicList;}
 
     public void setIsPlaylist(boolean isPlaylist){this.isPlaylist = isPlaylist;}
@@ -45,18 +45,19 @@ public class PlaylistAdapter extends BaseAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent ){
         ViewHolder holder;
+        /*优化listview加载*/
         if(convertView == null){
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.musiclist_view_holder,parent,false);
             holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
+            convertView.setTag(holder);//将convertview存储在holder中
         }else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();//重新获取viewholder
         }
         holder.playing.setVisibility((isPlaylist && position == AudioPlayer.get().getPlayPosition()) ? View.VISIBLE:View.INVISIBLE);
         Music music = musicList.get(position);
-        holder.Number.setText(String.valueOf(music.getSongId()));
-        //Bitmap cover = CoverLoader.getInstance().loadThumbnail(music);
-        //holder.Cover.setImageBitmap(cover);
+
+       Bitmap cover = CoverLoader.get().loadThumb(music);
+        holder.Cover.setImageBitmap(cover);
         holder.Title.setText(music.getTitle());
         String artist = FileUtils.getArtistAndAlbum(music.getArtist(),music.getAlbum());
         holder.Artist.setText(artist);
@@ -74,8 +75,10 @@ public class PlaylistAdapter extends BaseAdapter{
     private static class ViewHolder{
         @Bind(R.id.playing)
         private  View playing;
-        @Bind(R.id.number)
-        private TextView Number;
+        @Bind(R.id.cover)
+        private ImageView Cover;
+       /* @Bind(R.id.number)
+        private TextView Number;*/
         @Bind(R.id.title)
         private TextView Title;
         @Bind(R.id.artist)

@@ -171,7 +171,7 @@ public class AudioPlayer {
         mediaPlayer.pause();
         state = STATE_PAUSE;
         handler.removeCallbacks(mPublishRunnable);
-        Notifier.get().showPause(getPlayMusic());
+        //Notifier.get().showPause(getPlayMusic());
         MediaSessionManager.get().updatePlaybackState();
         for(OnPlayerListener listener : listeners){
             listener.onPlayerPause();

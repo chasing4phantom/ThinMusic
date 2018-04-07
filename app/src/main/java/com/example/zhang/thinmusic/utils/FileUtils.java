@@ -1,5 +1,6 @@
 package com.example.zhang.thinmusic.utils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -37,6 +38,15 @@ public class FileUtils {
     public static String getLogDir(){
         String dir = getAppDir()+ "/Log/";
         return mkdirs(dir);
+    }
+
+    public static String getRelativeMusicDir(){
+        String dir = "ThinMusic/Music/";
+        return mkdirs(dir);
+    }
+
+    public static String getCorpImagePath(Context context){
+        return context.getExternalCacheDir()+"/corp.jpg";
     }
 
     public static String getLrcFilePath(Music music){

@@ -1,17 +1,14 @@
 package com.example.zhang.thinmusic.fragments;
 
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.audiofx.AudioEffect;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.zhang.thinmusic.MusicPlayService;
 import com.example.zhang.thinmusic.PlayModeEnum;
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.adapter.PlaypageAdapter;
@@ -29,17 +25,18 @@ import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
 import com.example.zhang.thinmusic.utils.CoverLoader;
+import com.example.zhang.thinmusic.utils.FileUtils;
 import com.example.zhang.thinmusic.utils.Preferences;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
 import com.example.zhang.thinmusic.utils.SystemUtils;
 import com.example.zhang.thinmusic.widget.AlbumCover;
 import com.example.zhang.thinmusic.widget.IndicatorLayout;
 
-import java.text.SimpleDateFormat;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.zhang.thinmusic.utils.MediaUtil.formatTime;
+import me.wcy.lrcview.LrcView;
 
 /**
  * Created by zhang on 2018/3/26.
@@ -75,9 +72,10 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private ImageView play_prev;
     @Bind(R.id.play_next)
     private ImageView  play_next;
+
     private AlbumCover mAlbumCoverView;
-    /*private LrcView mLrcViewSingle;
-    private LrcView mLrcViewFull;*/
+    private LrcView mLrcView;
+
 
     private AudioManager audioManager;
     private List<View>  ViewPagerContent;
@@ -129,18 +127,23 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
 
     private void initViewPager(){
         View coverView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_pagecover, null);
+        View lrcview = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_lrcview,null);
 
         mAlbumCoverView = coverView.findViewById(R.id.album_cover_view);
         mAlbumCoverView.initNeedle(AudioPlayer.get().isPlaying());
 
-        ViewPagerContent = new ArrayList<>(1);
+        mLrcView = lrcview.findViewById(R.id.lrc_view);
+        mLrcView.setOnPlayClickListener(this::onPlayClick);
+        ViewPagerContent = new ArrayList<>(2);
         ViewPagerContent.add(coverView);
+        ViewPagerContent.add(lrcview);
         play_page.setAdapter(new PlaypageAdapter(ViewPagerContent));
     }
     private void initPlayMode(){
         int play_mode = Preferences.getPlayMode();
         mode.setImageLevel(play_mode);
     }
+
     @Override
     public void onChange(Music music){onChangeImp1(music);}
 
@@ -186,6 +189,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
             case R.id.play:
                 play();
                 break;
+
         }
     }
 
@@ -253,7 +257,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         playing_time.setText("00:00");
         max_time.setText(formatTime(music.getDuration()));
         setCoverAndBg(music);
-        //setLrc();
+        setLrc(music);
         if(AudioPlayer.get().isPlaying() || AudioPlayer.get().isPreparing()){
             playorpause_btn.setSelected(true);
             mAlbumCoverView.start();
@@ -268,6 +272,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private void next(){AudioPlayer.get().next();}
 
     private void prev(){AudioPlayer.get().prev();}
+
 
     /*切换播放模式*/
     private void switchPlayMode(){
@@ -297,6 +302,56 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         mAlbumCoverView.setCoverBitmap(CoverLoader.get().loadRound(music));
         PlayingBackground.setImageBitmap(CoverLoader.get().loadBlur(music));
 
+    }
+
+    private void setLrc(final Music music){
+        if(music.getType()==Music.Type.LOCAL){
+            String lrcpath= FileUtils.getLrcFilePath(music);
+            if(!TextUtils.isEmpty(lrcpath)){
+                loadLrc(lrcpath);
+            }/*else {
+                new SearchLrc(music.getArtist(),music.getTitle()){
+                    @Override
+                    public void onPrepare(){
+                        play_page.setTag(music);
+
+                        loadLrc("");
+                        setLrcLable("正在搜索歌词：")
+                    }
+                    @Override
+                    public void onExcuteSuccess(@NonNull String lrcPath){
+                        if(play_page.getTag()!=music){
+                            return;
+                        }
+
+                        play_page.setTag(null);
+
+                        loadLrc(lrcPath);
+                        setLrcLabel("暂无歌词");
+                    }
+                    @Override
+                    public void onExecuteFail(Exception e){
+                        if(play_page.getTag() !=music){
+                            return;
+                        }
+                        play_page.setTag(null);
+                        setLrcLabel("zanwugeci");
+                    }
+                }.excute();
+            }*/
+        }else{
+            String lrcPath= FileUtils.getLrcDir()+FileUtils.getLrcFileName(music.getArtist(),music.getTitle());
+            loadLrc(lrcPath);
+        }
+    }
+
+    private void loadLrc(String path){
+        File file =new File(path);
+        mLrcView.loadLrc(file);
+    }
+
+    private void setLrcLabel(String label){
+        mLrcView.setLabel(label);
     }
     private String formatTime(long time){
         return SystemUtils.formatTime("mm:ss",time);

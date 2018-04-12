@@ -160,6 +160,7 @@ public class AudioPlayer {
         MediaSessionManager.get().updatePlaybackState();
         for(OnPlayerListener listener : listeners){
             listener.onPlayerStart();
+
         }
     }
     public void pausePlayer(){pausePlayer(true);}

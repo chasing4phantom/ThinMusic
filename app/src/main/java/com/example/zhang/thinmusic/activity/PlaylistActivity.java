@@ -3,6 +3,8 @@ package com.example.zhang.thinmusic.activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,6 +12,7 @@ import android.widget.ListView;
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.adapter.OnMoreClickListener;
 import com.example.zhang.thinmusic.adapter.PlaylistAdapter;
+import com.example.zhang.thinmusic.adapter.onClick;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
@@ -19,9 +22,9 @@ import com.example.zhang.thinmusic.utils.Bind;
  * Created by zhang on 2018/3/22.
  */
 
-public class PlaylistActivity extends BaseActivity implements AdapterView.OnItemClickListener,OnMoreClickListener,OnPlayerListener {
+public class PlaylistActivity extends BaseActivity implements onClick,OnMoreClickListener,OnPlayerListener {
     @Bind(R.id.playlist)
-    private ListView Playlist;
+    private RecyclerView Playlist;
 
     private PlaylistAdapter adapter;
 
@@ -33,19 +36,27 @@ public class PlaylistActivity extends BaseActivity implements AdapterView.OnItem
 
     @Override
     protected void onServiceBound(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        Playlist.setLayoutManager(layoutManager);
         adapter = new PlaylistAdapter(AudioPlayer.get().getMusicList());
         adapter.setIsPlaylist(true);
+        adapter.setOnClickListener(this);
         adapter.setOnMoreClickListener(this);
+
         Playlist.setAdapter(adapter);
-        Playlist.setOnItemClickListener(this);
+        //Playlist.setOnItemClickListener(this);
         AudioPlayer.get().addOnPlayListener(this);
     }
 
-    @Override
+/*    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long id){
         AudioPlayer.get().play(position);//触摸监听，点击后直接播放
-    }
+    }*/
 
+    @Override
+    public void onClick(int position){
+        AudioPlayer.get().play(position);
+    }
     @Override
     public void onMoreClick(int position){
         String[] items = new String[]{"移除"};

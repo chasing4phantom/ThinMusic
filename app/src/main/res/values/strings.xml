@@ -5,5 +5,5 @@
     <string name="favourite_music">我喜欢的</string>
     <string name="setting_key_filter_size">filter_size</string>
     <string name="setting_key_filter_time">filter_time</string>
-
+    <string name="timer_set">设置成功，将于%s分钟后关闭</string>
 </resources>

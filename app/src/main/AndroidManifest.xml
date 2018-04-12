@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zhang.thinmusic">
        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
         <application
         android:name=".Application.MusicApplication"
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:theme="@style/AppTheme">
             <provider
                 android:name="android.support.v4.content.FileProvider"
-                android:authorities="${applicationId}.fileProvider"
+                android:authorities="com.example.zhang.thinmusic.fileprovider"
                 android:exported="false"
                 android:grantUriPermissions="true">
                 <meta-data

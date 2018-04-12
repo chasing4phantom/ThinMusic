@@ -115,7 +115,7 @@ public class Music implements Serializable {
         this.artist = artist;
     }
 
-    public String getAlbum() { return album; }
+    public String getAlbum() { return album;}
 
     public void setAlbum(String album) {
         this.album = album;

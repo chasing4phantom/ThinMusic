@@ -64,7 +64,7 @@ public class MusicUtils {
                  long id =cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
                  String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE)));
                  String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
-                 String album = cursor.getColumnName((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
+                 String album = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
                  long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
                  long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                  String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));

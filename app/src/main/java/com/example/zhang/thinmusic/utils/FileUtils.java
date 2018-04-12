@@ -3,6 +3,7 @@ package com.example.zhang.thinmusic.utils;
 import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.zhang.thinmusic.model.Music;
 
@@ -103,6 +104,7 @@ public class FileUtils {
         }else if(TextUtils.isEmpty(artist) && !TextUtils.isEmpty(album)){
             return album;
         }else{
+
             return artist + " - " + album;
         }
     }

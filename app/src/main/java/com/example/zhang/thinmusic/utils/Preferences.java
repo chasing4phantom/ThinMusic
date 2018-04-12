@@ -15,6 +15,7 @@ import com.example.zhang.thinmusic.R;
 public class Preferences {
     private static final String PLAY_POSITION = "play_position";
     private static final String PlAY_MODE = "play_mode";
+    private static final String PLAY_FAVOUR = "play_favour";
 
     private static Context sContext;
 
@@ -27,6 +28,8 @@ public class Preferences {
     public static int getPlayMode(){return getInt(PlAY_MODE,0);}
 
     public static void savePlayMode(int mode){saveInt(PlAY_MODE,mode);}
+
+
 
     public static String getFilterSize(){
         return getString(sContext.getString(R.string.setting_key_filter_size),"0");

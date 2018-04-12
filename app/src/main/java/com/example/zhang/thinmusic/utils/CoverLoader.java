@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
-import android.util.Log;
+
 
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.model.Music;
@@ -93,7 +93,6 @@ public class CoverLoader {
     public Bitmap loadCover(Music music, Type type) {
         Bitmap bitmap;
         String key = getKey(music);
-        Log.d("loadCover ", String.valueOf(type));
         LruCache<String, Bitmap> cache = cacheMap.get(type);
         if (TextUtils.isEmpty(key)) {
             bitmap = cache.get(KEY_NULL);

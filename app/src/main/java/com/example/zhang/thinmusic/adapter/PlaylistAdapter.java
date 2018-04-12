@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +15,7 @@ import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
 import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.FileUtils;
+import com.example.zhang.thinmusic.utils.ToastUtils;
 import com.example.zhang.thinmusic.utils.ViewBinder;
 
 import java.util.List;
@@ -24,61 +25,72 @@ import java.util.List;
  * Created by zhang on 2018/3/22.
  */
 
-public class PlaylistAdapter extends BaseAdapter{
+public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder>{
     private List<Music> musicList;
+    private onClick viewlistener;
     private OnMoreClickListener listener;
     private boolean isPlaylist;
     public PlaylistAdapter(List<Music> musicList){this.musicList = musicList;}
 
-    public void setIsPlaylist(boolean isPlaylist){this.isPlaylist = isPlaylist;}
-
-    public void setOnMoreClickListener(OnMoreClickListener listener){this.listener = listener;}
     @Override
-    public int getCount(){return musicList.size();}
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int ViewType){
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.musiclist_view_holder,parent,false);
+        final ViewHolder holder = new ViewHolder(view);
+        holder.musicView.setOnClickListener(v -> {
+          /*  @Override
+            public void onClick(View v){
+                int position = holder.getAdapterPosition();
+            Music music = musicList.get(position);
+            AudioPlayer.get().addAndPlay(music);
 
+            ToastUtils.show("已添加到播放列表");
+        }*/
+          if(viewlistener !=null){
+              int position = holder.getAdapterPosition();
+              viewlistener.onClick(position);
+          }
+        });
+        holder.More.setOnClickListener(v -> {
+            if(listener != null){
+                int position = holder.getAdapterPosition();
+                listener.onMoreClick(position);
+            }
+        });
+        return holder;
+    }
     @Override
-    public Object getItem(int postion){return musicList.get(postion);}
-
-    @Override
-    public long getItemId(int position){return  position;}
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent ){
-        ViewHolder holder;
-        /*优化listview加载*/
-        if(convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.musiclist_view_holder,parent,false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);//将convertview存储在holder中
-        }else {
-            holder = (ViewHolder) convertView.getTag();//重新获取viewholder
-        }
+    public void onBindViewHolder(PlaylistAdapter.ViewHolder holder, int position){
         holder.playing.setVisibility((isPlaylist && position == AudioPlayer.get().getPlayPosition()) ? View.VISIBLE:View.INVISIBLE);
-        Music music = musicList.get(position);
-
-       Bitmap cover = CoverLoader.get().loadThumb(music);
+        Music music =musicList.get(position);
+        Bitmap cover = CoverLoader.get().loadThumb(music);
         holder.Cover.setImageBitmap(cover);
         holder.Title.setText(music.getTitle());
         String artist = FileUtils.getArtistAndAlbum(music.getArtist(),music.getAlbum());
         holder.Artist.setText(artist);
-        holder.More.setOnClickListener(v ->{
-            if(listener != null){
-                listener.onMoreClick(position);
-            }
-        });
         holder.Divider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
-        return convertView;
-
+    }
+    @Override
+    public int getItemCount(){
+        return musicList.size();
     }
     private boolean isShowDivider(int position){return position!=musicList.size() -1;}
 
-    private static class ViewHolder{
+    public void setIsPlaylist(boolean isPlaylist) {
+        this.isPlaylist = isPlaylist;
+    }
+
+    public void setOnClickListener(onClick listener){
+        this.viewlistener =listener;
+    }
+    public void setOnMoreClickListener(OnMoreClickListener listener) {
+        this.listener = listener;
+    }
+    public void  setonMoreClickListener(OnMoreClickListener listener){ this.listener = listener;}
+    static class ViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.playing)
         private  View playing;
         @Bind(R.id.cover)
         private ImageView Cover;
-       /* @Bind(R.id.number)
-        private TextView Number;*/
         @Bind(R.id.title)
         private TextView Title;
         @Bind(R.id.artist)
@@ -87,8 +99,11 @@ public class PlaylistAdapter extends BaseAdapter{
         private ImageView More;
         @Bind(R.id.divider)
         private View Divider;
+        View musicView;
 
         public ViewHolder(View view){
+            super(view);
+            musicView =view;
             ViewBinder.bind(this,view);}
     }
 }

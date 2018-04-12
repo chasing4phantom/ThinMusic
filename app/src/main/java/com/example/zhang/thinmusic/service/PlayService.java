@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 
 import com.example.zhang.thinmusic.Application.Notifier;
@@ -32,6 +30,7 @@ public class PlayService extends Service {
         super.onCreate();
         AudioPlayer.get().init(this);
       MediaSessionManager.get().init(this);
+      QuitTimer.get().init(this);
     }
 
     @Nullable
@@ -59,5 +58,6 @@ public class PlayService extends Service {
     private void stop(){
         AudioPlayer.get().stopPlayer();
         Notifier.get().cancelAll();
+        QuitTimer.get().stop();
     }
 }

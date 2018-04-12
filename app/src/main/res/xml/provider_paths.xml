@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths>
+<paths xmnls="http://schemas.android.com/apk/res/android" >
     <!-- /storage/emulated/0/Download/${applicationId}/.beta/apk-->
-    <external-path
+<!--    <external-path
         name="beta_external_path"
-        path="Download/" />
+        path="Download/" />-->
     <!--/storage/emulated/0/Android/data/${applicationId}/files/apk/-->
     <external-path
-        name="beta_external_files_path"
-        path="Android/data/" />
+        name="external_files"
+        path="." />
 </paths>

@@ -25,7 +25,7 @@ import com.example.zhang.thinmusic.adapter.FragmentAdapter;
 import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.constants.Keys;
 import com.example.zhang.thinmusic.fragments.LocalMusicFragment;
-import com.example.zhang.thinmusic.fragments.NetMusicFragment;
+import com.example.zhang.thinmusic.fragments.NetlistFragment;
 import com.example.zhang.thinmusic.fragments.PlayFragment;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
@@ -44,8 +44,8 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
     private NavigationView navigationView;
     @Bind(R.id.localmusic)
     private TextView LocalMusic;
-    @Bind(R.id.favourite_music)
-    private TextView FavourMusic;
+    @Bind(R.id.net_music)
+    private TextView NetMusic;
     @Bind(R.id.iv_menu)
     private ImageView menu;
     @Bind(R.id.viewpager)
@@ -55,7 +55,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
 
     private View NavigationHeader;
     private LocalMusicFragment localMusicFragment;
-    private NetMusicFragment favourMusicFragment;
+    private NetlistFragment netMusicFragment;
     private PlayFragment playFragment;
     private ControlPanel controlPanel;
     private NaviMenuExcuter naviMenuExcuter;
@@ -67,17 +67,17 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(saveInstanceState);
         if(isGrantExternalRW(HomepageActivity.this) != true){
             return;
-        }
+        }//判断是否有读取存储权限
         setContentView(R.layout.activity_music);
     }
 
     @Override
     protected void onServiceBound(){
         setupView();
-        controlPanel = new ControlPanel(Playbar);
-        naviMenuExcuter =new NaviMenuExcuter(this);
-        AudioPlayer.get().addOnPlayListener(controlPanel);
-        QuitTimer.get().setOnTimerListener(this);
+        controlPanel = new ControlPanel(Playbar);//playbar初始化
+        naviMenuExcuter =new NaviMenuExcuter(this);//navigation初始化
+        AudioPlayer.get().addOnPlayListener(controlPanel);//playbar监听
+        QuitTimer.get().setOnTimerListener(this);//计时器监听
         parseIntent();
     }
     @Override
@@ -90,21 +90,24 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         navigationView.addHeaderView(NavigationHeader);
 
 
+        //初始化碎片，并默认显示localmusic
         localMusicFragment = new LocalMusicFragment();
-        favourMusicFragment = new NetMusicFragment();
+        netMusicFragment = new NetlistFragment();
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(localMusicFragment);
-        adapter.addFragment(favourMusicFragment);
+        adapter.addFragment(netMusicFragment);
         viewPager.setAdapter(adapter);
         LocalMusic.setSelected(true);
 
+        //绑定按键监听
         LocalMusic.setOnClickListener(this);
-        FavourMusic.setOnClickListener(this);
+        NetMusic.setOnClickListener(this);
         menu.setOnClickListener(this);
         Playbar.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
         navigationView.setNavigationItemSelectedListener(this);
     }
+    /*由通知进入playfragment*/
     private void parseIntent(){
         Intent intent = getIntent();
         if(intent.hasExtra(Extras.EXTRA_NOTIFICATION)){
@@ -112,7 +115,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
             setIntent(new Intent());
         }
     }
-
+   /* 定时器显示*/
     @Override
     public void onTimer(long remain){
         if(timerItem == null){
@@ -122,13 +125,15 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         timerItem.setTitle(remain == 0? title : SystemUtils.formatTime(title +"(mm:ss)",remain));
 
     }
+
+    /*按键响应处理逻辑*/
     @Override
     public  void onClick(View v) {
         switch (v.getId()) {
             case R.id.localmusic:
                 viewPager.setCurrentItem(0);
                 break;
-            case R.id.favourite_music:
+            case R.id.net_music:
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.play_bar:
@@ -156,11 +161,11 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
                 public void onPageSelected(int position){
            if(position == 0){
                LocalMusic.setSelected(true);
-               FavourMusic.setSelected(false);
+               NetMusic.setSelected(false);
            }
            else{
                LocalMusic.setSelected(false);
-               FavourMusic.setSelected(true);
+               NetMusic.setSelected(true);
            }
         }//布局切换
 
@@ -174,7 +179,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
                         return;
                     }
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_up,0);
+            ft.setCustomAnimations(R.anim.fragment_slide_up,0);//切换时animation动画过度
             if(playFragment == null){
                 playFragment = new PlayFragment();
                 ft.replace(android.R.id.content,playFragment);
@@ -192,6 +197,8 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         ft.commitAllowingStateLoss();
         isPlayFragmentShow = false;
     }
+
+    /*按下返回键的逻辑*/
     @Override
     public  void onBackPressed(){
             if(playFragment !=null && isPlayFragmentShow){
@@ -205,21 +212,22 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         super.onBackPressed();
     }
 
+    /*数据保存*/
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(Bundle outState){
         outState.putInt(Keys.VIEW_PAGER_INDEX,viewPager.getCurrentItem());
         localMusicFragment.onSaveInstanceState(outState);
-        favourMusicFragment.onSaveInstanceState(outState);
+        netMusicFragment.onSaveInstanceState(outState);
 
     }
-
+   /* 数据恢复*/
     @Override
     protected void onRestoreInstanceState(final Bundle saveInstanceState){
         viewPager.post(()->{
             viewPager.setCurrentItem(saveInstanceState.getInt(Keys.VIEW_PAGER_INDEX),false);
             localMusicFragment.onRestoreInstanceState(saveInstanceState);
-            favourMusicFragment.onRestoreInstanceState(saveInstanceState);
+            netMusicFragment.onRestoreInstanceState(saveInstanceState);
         });
     }
 

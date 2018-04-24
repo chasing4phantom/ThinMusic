@@ -31,12 +31,12 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/favourite_music"
+            android:id="@+id/net_music"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
             android:gravity="center"
-            android:text="@string/favourite_music"
+            android:text="@string/net_music"
             android:textColor="@drawable/music_tab_bar_text_color_selector"
             android:textSize="15sp" />
     </LinearLayout>

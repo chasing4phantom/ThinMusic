@@ -63,7 +63,7 @@ public class ControlPanel implements View.OnClickListener,OnPlayerListener {
                 break;
         }
     }
-
+    /*换歌时playbar状态变更*/
     @Override
     public void onChange(Music music){
         if(music == null){

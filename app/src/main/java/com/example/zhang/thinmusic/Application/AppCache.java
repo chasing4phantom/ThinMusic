@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.zhang.thinmusic.model.ListInfo;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.Preferences;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AppCache {
     public Context context;
     private final List<Music> LocalList = new ArrayList<>();
+    private final List<ListInfo> Songlist = new ArrayList<>();
     private final List<Activity> ActivityStack = new ArrayList<>();
 
     private AppCache(){
@@ -44,6 +46,8 @@ public class AppCache {
     public Context getContext(){return  context;}
 
     public List<Music> getLocalMusicList(){return LocalList;}
+
+    public List<ListInfo> getSongList(){return Songlist;}
 
     public void clearStack(){
         List<Activity> activityStack = ActivityStack;

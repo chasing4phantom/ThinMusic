@@ -28,7 +28,7 @@ import com.example.zhang.thinmusic.utils.PermissionReq;
 import com.example.zhang.thinmusic.utils.ViewBinder;
 
 
-/**
+/**activity基类
  * Created by zhang on 2018/3/20.
  */
 
@@ -75,13 +75,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);//给左上角图标的左边加上一个返回的图标
         }
     }
+    //绑定播放服务
     private  void bindService(){
         Intent intent = new Intent();
         intent.setClass(this,PlayService.class);
         serviceConnection = new PlayServiceConnection();
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+       /* @param intent
+        @param serviceconnection 监听服务当前状态
+        @param BIND_AUTO_CREATE 服务自动创建然后绑定*/
     }
-
+    //重写Serviceconnection
     private  class PlayServiceConnection implements ServiceConnection{
         @Override
         public  void onServiceConnected(ComponentName name, IBinder service){
@@ -97,6 +101,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onServiceBound(){
 
     }
+
+    //沉浸式任务栏
     private void setSystemBarTransparent(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             //Lolipop以上版本
@@ -114,7 +120,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-   // public void showProgress(){showProgress("正在加载中...");}
+    public void showProgress(){showProgress(getString(R.string.loading));}
+
+    public void showProgress(String message){
+        if(progressDialog == null){
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.setMessage(message);
+        if(!progressDialog.isShowing()){
+            progressDialog.show();
+        }
+    }
+
+    public void cancelProgress(){
+        if(progressDialog !=null && progressDialog.isShowing()){
+            progressDialog.cancel();
+        }
+    }
+
+    //权限请求
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);

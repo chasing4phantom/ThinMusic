@@ -8,8 +8,6 @@ import android.os.Looper;
 import android.util.Log;
 
 
-import com.example.zhang.thinmusic.Application.Notifier;
-import com.example.zhang.thinmusic.Mp3Info;
 import com.example.zhang.thinmusic.PlayModeEnum;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.OnPlayerListener;

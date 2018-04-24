@@ -1,6 +1,5 @@
 package com.example.zhang.thinmusic.service;
 
-import com.example.zhang.thinmusic.Mp3Info;
 import com.example.zhang.thinmusic.model.Music;
 
 /**

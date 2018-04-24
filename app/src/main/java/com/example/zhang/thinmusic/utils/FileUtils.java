@@ -7,7 +7,10 @@ import android.util.Log;
 
 import com.example.zhang.thinmusic.model.Music;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by zhang on 2018/3/23.
@@ -85,6 +88,10 @@ public class FileUtils {
         return getFileName(artist,title) + LRC;
     }
 
+    public static String getAlbumFileName(String artist,String title){
+        return getFileName(artist,title);
+    }
+
     public static String getFileName(String artist,String title){
 
         if(TextUtils.isEmpty(artist)){
@@ -106,6 +113,17 @@ public class FileUtils {
         }else{
 
             return artist + " - " + album;
+        }
+    }
+
+    public static void saveLrcFile(String path,String content){
+        try{
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
+            bufferedWriter.write(content);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

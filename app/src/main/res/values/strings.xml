@@ -2,8 +2,13 @@
     <string name="app_name">ThinMusic</string>
     <string name="play_time_start">00:00</string>
     <string name="local_music">我的音乐</string>
-    <string name="favourite_music">我喜欢的</string>
+    <string name="net_music">网络音乐</string>
     <string name="setting_key_filter_size">filter_size</string>
     <string name="setting_key_filter_time">filter_time</string>
+    <string name="song_list_item_title_1">1.%1$s - %2$s</string>
+    <string name="song_list_item_title_2">2.%1$s - %2$s</string>
+    <string name="song_list_item_title_3">3.%1$s - %2$s</string>
     <string name="timer_set">设置成功，将于%s分钟后关闭</string>
+    <string name="recent_update">最近更新：%s</string>
+    <string name="loading">努力加载中…</string>
 </resources>

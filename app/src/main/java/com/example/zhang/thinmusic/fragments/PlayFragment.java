@@ -4,6 +4,7 @@ package com.example.zhang.thinmusic.fragments;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.example.zhang.thinmusic.PlayModeEnum;
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.adapter.PlaypageAdapter;
+import com.example.zhang.thinmusic.executor.SearchLrc;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
@@ -256,6 +258,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         lastProgress = 0;
         playing_time.setText("00:00");
         max_time.setText(formatTime(music.getDuration()));
+        Log.d( "onChangeImpl: ",String.valueOf(music.getDuration()));
         setCoverAndBg(music);
         setLrc(music);
         if(AudioPlayer.get().isPlaying() || AudioPlayer.get().isPreparing()){
@@ -309,21 +312,22 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
             String lrcpath= FileUtils.getLrcFilePath(music);
             if(!TextUtils.isEmpty(lrcpath)){
                 loadLrc(lrcpath);
-            }/*else {
+            }else {
                 new SearchLrc(music.getArtist(),music.getTitle()){
                     @Override
                     public void onPrepare(){
                         play_page.setTag(music);
 
                         loadLrc("");
-                        setLrcLable("正在搜索歌词：")
+                        setLrcLabel("正在搜索歌词：");
+
                     }
                     @Override
-                    public void onExcuteSuccess(@NonNull String lrcPath){
+                    public void onExecuteSuccess(@NonNull String lrcPath){
                         if(play_page.getTag()!=music){
                             return;
                         }
-
+                        //清除tag
                         play_page.setTag(null);
 
                         loadLrc(lrcPath);
@@ -334,13 +338,16 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
                         if(play_page.getTag() !=music){
                             return;
                         }
+
+                        //清除tag
                         play_page.setTag(null);
-                        setLrcLabel("zanwugeci");
+                        setLrcLabel("暂无歌词");
                     }
-                }.excute();
-            }*/
+                }.execute();
+            }
         }else{
             String lrcPath= FileUtils.getLrcDir()+FileUtils.getLrcFileName(music.getArtist(),music.getTitle());
+            Log.d( "setLrc: ",lrcPath);
             loadLrc(lrcPath);
         }
     }

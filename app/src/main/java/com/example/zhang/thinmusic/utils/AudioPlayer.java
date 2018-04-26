@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 
-/**
+/**mediaplayer封装
  * Created by zhang on 2018/3/19.
  */
 
@@ -39,6 +39,7 @@ public class AudioPlayer {
     private  final List<OnPlayerListener> listeners = new ArrayList<>();
     private int state = STATE_IDLE;
 
+    //单例模式
     public static AudioPlayer get(){return SingletonHolder.instance;}
 
     private static class SingletonHolder{
@@ -47,6 +48,7 @@ public class AudioPlayer {
 
     private AudioPlayer(){}
 
+    //播放器初始化
     public void init(Context context) {
         this.context = context.getApplicationContext();
         musicList = DBManager.get().getMusicDao().queryBuilder().build().list();
@@ -235,6 +237,8 @@ public class AudioPlayer {
             }
         }
     }
+
+    //子进程刷新播放进度条
     private Runnable mPublishRunnable = new Runnable() {
         @Override
         public void run() {

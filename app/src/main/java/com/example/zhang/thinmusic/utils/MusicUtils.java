@@ -57,10 +57,7 @@ public class MusicUtils {
 
                 int i =0;
                 while(cursor.moveToNext()){
-/*                    int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
-                    if(isMusic ==0){
-                        continue;
-                    }*/
+
                  long id =cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
                  String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE)));
                  String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
+/**定义实体类
  * Created by zhang on 2018/4/16.
  */
 

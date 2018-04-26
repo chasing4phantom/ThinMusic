@@ -1,7 +1,7 @@
 package com.example.zhang.thinmusic;
 
 /**
- * 播放模式
+ * 枚举类控制播放模式
  * Created by zhang on 2018/3/19.
  */
 

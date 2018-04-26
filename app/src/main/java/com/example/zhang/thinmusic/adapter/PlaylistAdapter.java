@@ -37,14 +37,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.musiclist_view_holder,parent,false);
         final ViewHolder holder = new ViewHolder(view);
         holder.musicView.setOnClickListener(v -> {
-          /*  @Override
-            public void onClick(View v){
-                int position = holder.getAdapterPosition();
-            Music music = musicList.get(position);
-            AudioPlayer.get().addAndPlay(music);
 
-            ToastUtils.show("已添加到播放列表");
-        }*/
           if(viewlistener !=null){
               int position = holder.getAdapterPosition();
               viewlistener.onClick(position);

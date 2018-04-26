@@ -2,7 +2,7 @@ package com.example.zhang.thinmusic.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
+/**定义实体类
  * Created by zhang on 2018/4/17.
  */
 

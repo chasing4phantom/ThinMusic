@@ -8,7 +8,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
+/**自定义拦截器
  * Created by zhang on 2018/4/23.
  */
 public class HttpInterceptor implements Interceptor {
@@ -18,7 +18,7 @@ public class HttpInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request()
                 .newBuilder()
-                .addHeader(UA, makeUA())
+                .addHeader(UA, makeUA())//添加请求头信息
                 .build();
         return chain.proceed(request);
     }

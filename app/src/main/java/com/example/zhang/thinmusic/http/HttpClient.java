@@ -38,6 +38,8 @@ public class HttpClient {
     private static final String PARAM_TING_UID = "tinguid";
     private static final String PARAM_QUERY = "query";
 
+
+   /* 配置okhttpclient*/
     static {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -89,7 +91,7 @@ public class HttpClient {
                 .execute(new JsonCallback<OnLineMusicList>(OnLineMusicList.class) {
                     @Override
                     public void onResponse(OnLineMusicList response, int id) {
-                        callback.onSuccess(response);
+                        callback.onSuccess(response);//将回调response解析为OnlineMusicList类型的对象
                     }
 
                     @Override
@@ -112,7 +114,7 @@ public class HttpClient {
                 .execute(new JsonCallback<DownloadInfo>(DownloadInfo.class) {
                     @Override
                     public void onResponse(DownloadInfo response, int id) {
-                        callback.onSuccess(response);
+                        callback.onSuccess(response);//将回调response解析为DownloadInfo类型的对象
                     }
 
                     @Override
@@ -155,7 +157,7 @@ public class HttpClient {
                 .execute(new JsonCallback<SearchMusic>(SearchMusic.class) {
                     @Override
                     public void onResponse(SearchMusic response, int id) {
-                        callback.onSuccess(response);
+                        callback.onSuccess(response);//将回调response解析为SearchMusic类型的对象
                     }
 
                     @Override
@@ -179,7 +181,7 @@ public class HttpClient {
                     @Override
                     public void onResponse(Lrc response, int id) {
                         callback.onSuccess(response);
-                    }
+                    }//将回调response解析为Lrc类型的对象
 
                     @Override
                     public void onError(Call call, Exception e, int id) {

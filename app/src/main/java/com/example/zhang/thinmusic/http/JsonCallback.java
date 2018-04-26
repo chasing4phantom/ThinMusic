@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-/**Json封装
+/**自定义Json回调
  * Created by zhang on 2018/4/17.
  */
 

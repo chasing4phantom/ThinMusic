@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 
 /**
- * 歌曲信息
+ * 歌曲实体类
  * Created by zhang on 2018/3/20.
  */
 @Entity(nameInDb = "SystemMessage")

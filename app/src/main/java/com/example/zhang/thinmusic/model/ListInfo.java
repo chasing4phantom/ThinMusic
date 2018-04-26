@@ -2,30 +2,21 @@ package com.example.zhang.thinmusic.model;
 
 import java.io.Serializable;
 
-/**
+/**定义实体类
  * Created by zhang on 2018/4/13.
  */
 
 public class ListInfo implements Serializable {
     private String title;
-    /**
-     * #主打榜单
-     * 1.新歌榜
-     * 2.热歌榜
-     * #分类榜单
-     * 20.华语金曲榜
-     * 21.欧美金曲榜
-     * 24.影视金曲榜
-     * 23.情歌对唱榜
-     * 25.网络歌曲榜
-     * 22.经典老歌榜
-     * 11.摇滚榜
-     * #媒体榜单
-     * 6.KTV热歌榜
-     * 8.Billboard
-     * 18.Hito中文榜
-     * 7.叱咤歌曲榜
-     */
+    /*全球榜单
+       Billboard
+       UK Chart
+       Hito中文榜
+       国内榜单
+       热歌榜
+       新歌榜
+       华语金曲榜
+       欧美金曲榜*/
     public String type;
     private String coverUrl;
     private String music1;

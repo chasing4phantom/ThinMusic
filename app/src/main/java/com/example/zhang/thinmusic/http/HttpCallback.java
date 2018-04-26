@@ -1,6 +1,6 @@
 package com.example.zhang.thinmusic.http;
 
-/**
+/**回调抽象类
  * Created by zhang on 2018/4/17.
  */
 

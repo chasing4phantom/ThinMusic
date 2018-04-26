@@ -31,6 +31,7 @@ import com.example.zhang.thinmusic.model.OnLineMusicList;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
 import com.example.zhang.thinmusic.utils.FileUtils;
+import com.example.zhang.thinmusic.utils.ImageUtils;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
 import com.example.zhang.thinmusic.utils.ToastUtils;
 import com.example.zhang.thinmusic.utils.ViewUtils;
@@ -176,7 +177,8 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-
+                        HeaderBg.setImageBitmap(resource);
+                        Cover.setImageBitmap(ImageUtils.blur(resource));
                     }
                 });
     }

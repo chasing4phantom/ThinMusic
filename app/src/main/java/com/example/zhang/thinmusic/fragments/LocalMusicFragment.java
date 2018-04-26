@@ -35,7 +35,7 @@ import com.example.zhang.thinmusic.utils.ToastUtils;
 import java.io.File;
 import java.util.List;
 
-/**
+/**本地播放列表碎片
  * Created by zhang on 2018/3/25.
  */
 
@@ -48,12 +48,12 @@ public class LocalMusicFragment extends BaseFragment implements onClick,OnMoreCl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.fragment_local_music,container,false);
+        View view = inflater.inflate(R.layout.fragment_local_music,container,false);//布局实例化
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//保持纵向
         LocalMusic = view.findViewById(R.id.local_music);
         LocalMusic.setLayoutManager(linearLayoutManager);
-        adapter =new PlaylistAdapter(AppCache.get().getLocalMusicList());
+        adapter =new PlaylistAdapter(AppCache.get().getLocalMusicList());//配置适配器按键监听
         adapter.setOnClickListener(this);
         adapter.setonMoreClickListener(this);
         LocalMusic.setAdapter(adapter);
@@ -64,21 +64,21 @@ public class LocalMusicFragment extends BaseFragment implements onClick,OnMoreCl
     public void onActivityCreated(@Nullable Bundle saveInstanceState){
         super.onActivityCreated(saveInstanceState);
         if(AppCache.get().getLocalMusicList().isEmpty()){
-            scanMusic(null);
+            scanMusic(null);//activity执行完成oncreate()方法，fragment开辟子线程扫描音乐
         }
     }
 
-   // @Subscribe(tags = {@Tag(RxBusTags.SCAN_MUSIC)})
+
     public void scanMusic(Object object) {
         LocalMusic.setVisibility(View.GONE);
-        PermissionReq.with(this)
+        PermissionReq.with(this)//确认读取权限
                 .permissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .result(new PermissionReq.Result() {
-            @SuppressLint("StaticFieldLeak")
+            @SuppressLint("StaticFieldLeak")//忽略警告
                     @Override
             public void onGranted () {
-                new AsyncTask<Void, Void, List<Music>>() {
+                new AsyncTask<Void, Void, List<Music>>() {//耗时操作放在子线程中
                     @Override
                     protected List<Music> doInBackground(Void... params) {
                         return MusicUtils.scanMusic(getContext());
@@ -101,18 +101,8 @@ public class LocalMusicFragment extends BaseFragment implements onClick,OnMoreCl
             }
         }).request();
     }
-       /* @Override
-        protected void setListener () {
-            LocalMusic.setOnItemClickListener(this);
-        }
-        @Override
-        public void onItemClick (AdapterView <?> parent, View view,int position,long id){
-            Music music = AppCache.get().getLocalMusicList().get(position);
-            Log.i(music.getPath(), "onItemClick: ");
 
-            AudioPlayer.get().addAndPlay(music);
-            ToastUtils.show("已添加到播放列表");
-        }*/
+    //由于使用recyclerview，需自己写监听方法
        @Override
        public void onClick(final int position){
            Music music = AppCache.get().getLocalMusicList().get(position);

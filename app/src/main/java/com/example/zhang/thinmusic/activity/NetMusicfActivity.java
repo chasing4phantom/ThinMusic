@@ -22,6 +22,7 @@ import com.example.zhang.thinmusic.adapter.OnMoreClickListener;
 import com.example.zhang.thinmusic.adapter.OnlineMusicAdapter;
 import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.constants.LoadStateEnum;
+import com.example.zhang.thinmusic.executor.ShareOnlineMusic;
 import com.example.zhang.thinmusic.http.HttpCallback;
 import com.example.zhang.thinmusic.http.HttpClient;
 import com.example.zhang.thinmusic.model.ListInfo;
@@ -166,7 +167,7 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
         TextView UpdateDate = Header.findViewById(R.id.tv_update_date);
         TextView Comment = Header.findViewById(R.id.tv_comment);
         Title.setText(onLineMusicList.getBillboard().getName());
-        UpdateDate.setText(getString(R.string.recent_update,onLineMusicList.getBillboard().getUpdate_data()));
+        UpdateDate.setText(getString(R.string.recent_update,onLineMusicList.getBillboard().getUpdate_date()));
         Comment.setText(onLineMusicList.getBillboard().getComment());
         Glide.with(this)
                 .load(onLineMusicList.getBillboard().getPic_s640())
@@ -177,8 +178,8 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        HeaderBg.setImageBitmap(resource);
-                        Cover.setImageBitmap(ImageUtils.blur(resource));
+                        Cover.setImageBitmap(resource);
+                        HeaderBg.setImageBitmap(ImageUtils.blur(resource));
                     }
                 });
     }
@@ -203,7 +204,7 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
     }
 
     private void share(final OnLineMusic onlineMusic){
-/*        new ShareOnlineMusic(this,onlineMusic.getTitle(),onlineMusic.getSong_id()){
+        new ShareOnlineMusic(this,onlineMusic.getTitle(),onlineMusic.getSong_id()){
             @Override
             public void onPrepare(){showProgress();}
 
@@ -212,7 +213,7 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
 
             @Override
             public void onExecuteFail(Exception e){cancelProgress();}
-        }.execute();*/
+        }.execute();
     }
 
     private void download(final OnLineMusic onLineMusic){

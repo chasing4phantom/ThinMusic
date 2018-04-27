@@ -23,8 +23,8 @@ public class OnLineMusicList {
     public void setBillboard(Billboard billboard){this.billboard = billboard;}
 
     public static class Billboard{
-        @SerializedName("update_data")
-        private String update_data;
+        @SerializedName("update_date")
+        private String update_date;
         @SerializedName("name")
         private String name;
         @SerializedName("comment")
@@ -38,9 +38,9 @@ public class OnLineMusicList {
         @SerializedName("pic_s210")
         private String pic_s210;
 
-        public String getUpdate_data(){return update_data;}
+        public String getUpdate_date(){return update_date;}
 
-        public void setUpdate_data(String update_data){this.update_data = update_data;}
+        public void setUpdate_date(String update_date){this.update_date = update_date;}
 
         public String getName(){return name;}
 

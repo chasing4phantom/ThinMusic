@@ -11,4 +11,6 @@
     <string name="timer_set">设置成功，将于%s分钟后关闭</string>
     <string name="recent_update">最近更新：%s</string>
     <string name="loading">努力加载中…</string>
+    <string name="share_music">我用%1$s分享了歌曲《%2$s》%3$s</string>
+    <string name="share">分享</string>
 </resources>

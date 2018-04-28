@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 
 import com.example.zhang.thinmusic.R;
+import com.example.zhang.thinmusic.activity.AboutActivity;
 import com.example.zhang.thinmusic.activity.HomepageActivity;
 import com.example.zhang.thinmusic.service.QuitTimer;
 import com.example.zhang.thinmusic.utils.ToastUtils;
@@ -28,7 +29,7 @@ public class NaviMenuExcuter {
                 timer();
                 return true;
             case R.id.nav_about:
-                 //startActivity(AboutActivity.class);
+                 startActivity(AboutActivity.class);
                 return true;
         }
         return false;

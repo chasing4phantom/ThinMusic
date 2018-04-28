@@ -13,4 +13,5 @@
     <string name="loading">努力加载中…</string>
     <string name="share_music">我用%1$s分享了歌曲《%2$s》%3$s</string>
     <string name="share">分享</string>
+    <string name="about_github">https://github.com/chasing4phantom/ThinMusic</string>
 </resources>

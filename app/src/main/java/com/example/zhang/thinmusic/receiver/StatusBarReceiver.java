@@ -12,7 +12,7 @@ import com.example.zhang.thinmusic.utils.AudioPlayer;
  */
 
 public class StatusBarReceiver extends BroadcastReceiver {
-    public static final String ACTION_STATUS_BAR = "me.wcy.music.STATUS_BAR_ACTIONS";
+    public static final String ACTION_STATUS_BAR = "com.example.zhang.thinmusic.STATUS_BAR_ACTIONS";
     public static final String EXTRA = "extra";
     public static final String EXTRA_NEXT = "next";
     public static final String EXTRA_PLAY_PAUSE = "play_pause";

@@ -17,9 +17,7 @@ import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.ImageUtils;
 
 
-
-
-/**
+/**播放页封面绘制
  * Created by 26292 on 2018/4/5.
  */
 
@@ -82,6 +80,7 @@ public class AlbumCover extends View  implements ValueAnimator.AnimatorUpdateLis
         mTopLineHeight = dp2px(1);
         mCoverBorderWidth = dp2px(1);
 
+        //指针动画
         mPlayAnimator = ValueAnimator.ofFloat(NEEDLE_ROTATION_PAUSE,NEEDLE_ROTATION_PLAY);
         mPlayAnimator.setDuration(300);
         mPlayAnimator.addUpdateListener(this);
@@ -95,13 +94,15 @@ public class AlbumCover extends View  implements ValueAnimator.AnimatorUpdateLis
             return;
         }
 
-        int unit = Math.min(getWidth(),getHeight())/8;
-        CoverLoader.get().setRoundLength(unit *4);
+        int unit = Math.min(getWidth(),getHeight())/8;//左侧屏幕到黑胶外边缘的长度为屏幕长度的1/8，作为基本单位
+        CoverLoader.get().setRoundLength(unit *4);//封面直径为屏幕长度的1/2
 
-        mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap,unit * 6,unit *6);
-        mCoverBitmap = ImageUtils.resizeImage(mCoverBitmap,unit *4,unit *4);
-        mNeedleBitmap = ImageUtils.resizeImage(mNeedleBitmap,unit *2,unit*2);
+        mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap,unit * 6,unit *6);//将黑胶图片缩小到屏幕的3/4
+        mCoverBitmap = ImageUtils.resizeImage(mCoverBitmap,unit *4,unit *4);//将封面图片缩小到屏幕的1/2
+        mNeedleBitmap = ImageUtils.resizeImage(mNeedleBitmap,unit *2,unit*2);//将指针缩小为屏幕的1/4
 
+
+        //确定各个元素的横纵坐标
         int discOffsetY= mNeedleBitmap.getHeight()/2;
         mDiscPoint.x = (getWidth()- mDiscBitmap.getWidth())/2;
         mDiscPoint.y = discOffsetY;

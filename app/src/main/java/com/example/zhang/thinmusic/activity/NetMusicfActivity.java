@@ -144,17 +144,13 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
         final OnLineMusic onLineMusic = MusicList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(MusicList.get(position).getTitle());
-        String path = FileUtils.getMusicDir()+ FileUtils.getMp3FileNme(onLineMusic.getArtisit_name(),onLineMusic.getTitle());
-        File file = new File(path);
-        int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
+        int itemsId = R.array.online_music_dialog;
         dialog.setItems(itemsId,(dialog1,which)->{
             switch (which){
                 case 0:
                     share(onLineMusic);
                     break;
-                case 1:
-                    download(onLineMusic);
-                    break;
+
             }
         });
         dialog.show();
@@ -214,25 +210,6 @@ public class NetMusicfActivity extends BaseActivity implements AdapterView.OnIte
             @Override
             public void onExecuteFail(Exception e){cancelProgress();}
         }.execute();
-    }
-
-    private void download(final OnLineMusic onLineMusic){
-/*        new DownloadOnlineMusicf(this,onLineMusic){
-            @Override
-            public void onProgress(){showProgress();}
-
-            @Override
-            public void onExecuteSuccess(Void aVoid){
-                cancelProgress();
-                ToastUtils.show(getString(R.string.now_download,onLineMusic.getTitle()));
-            }
-
-            @Override
-            public void onExecuteFail(Exception e){
-                cancelProgress();
-                ToastUtils.show("暂时无法下载");
-            }
-        }.excute();*/
     }
 
 }

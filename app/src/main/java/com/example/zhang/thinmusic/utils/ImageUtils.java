@@ -298,16 +298,16 @@ public class ImageUtils {
         canvas.drawBitmap(source, 0, 0, paint);
         return target;
     }
-
+/*
     public static void startAlbum(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
+        intent.setType("image*//*");
         activity.startActivityForResult(intent, RequestCode.REQUEST_ALBUM);
     }
 
     public static void startCorp(Activity activity, Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(uri, "image*//*");
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
         intent.putExtra("aspectX", 1);
@@ -322,5 +322,5 @@ public class ImageUtils {
         // 取消人脸识别
         intent.putExtra("noFaceDetection", true);
         activity.startActivityForResult(intent, RequestCode.REQUEST_CORP);
-    }
+    }*/
 }

@@ -31,8 +31,9 @@ import com.example.zhang.thinmusic.utils.FileUtils;
 import com.example.zhang.thinmusic.utils.Preferences;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
 import com.example.zhang.thinmusic.utils.SystemUtils;
+import com.example.zhang.thinmusic.utils.ToastUtils;
 import com.example.zhang.thinmusic.widget.AlbumCover;
-import com.example.zhang.thinmusic.widget.IndicatorLayout;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,8 +59,6 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private TextView artist;
     @Bind(R.id.play_page)
     private ViewPager play_page;
-    @Bind(R.id.il_indicator)
-    private IndicatorLayout ilIndicator;
     @Bind(R.id.seekbar_progress)
     private SeekBar seekBar;
     @Bind(R.id.playing_time)
@@ -79,7 +78,6 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     private LrcView mLrcView;
 
 
-    private AudioManager audioManager;
     private List<View>  ViewPagerContent;
     private int lastProgress;
     private boolean isdraggingprogress;
@@ -97,7 +95,6 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
 
         initSystemBar();
         initViewPager();
-        ilIndicator.create(ViewPagerContent.size());
         initPlayMode();
         onChangeImp1(AudioPlayer.get().getPlayMusic());
         AudioPlayer.get().addOnPlayListener(this);
@@ -181,7 +178,6 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
             case R.id.play_mode:
                 switchPlayMode();
                 break;
-
             case R.id.play_prev:
                 prev();
                 break;
@@ -201,7 +197,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void onPageSelected(int position){ilIndicator.setCurrent(position);}
+    public void onPageSelected(int position){}
     @Override
     public void onPageScrollStateChanged(int state){}
 
@@ -283,12 +279,15 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         switch (mode){
             case LOOP:
                 mode = PlayModeEnum.SHUFFLE;
+                ToastUtils.show("切换为随机播放");
                 break;
             case SHUFFLE:
                 mode = PlayModeEnum.SINGLE;
+                ToastUtils.show("切换为单曲循环");
                 break;
             case SINGLE:
                 mode = PlayModeEnum.LOOP;
+                ToastUtils.show("切换为列表循环");
                 break;
         }
         Preferences.savePlayMode(mode.value());

@@ -92,12 +92,18 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
+        Bundle bundle = getArguments();
         initSystemBar();
         initViewPager();
         initPlayMode();
-        onChangeImp1(AudioPlayer.get().getPlayMusic());
+        if(bundle!=null &&bundle.getString("path")!=null){
+            onChange(AudioPlayer.get().handlepath(bundle.getString("path")));
+
+        }else {
+            onChangeImp1(AudioPlayer.get().getPlayMusic());
+        }
         AudioPlayer.get().addOnPlayListener(this);
+
     }
 
     @Override
@@ -144,7 +150,9 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void onChange(Music music){onChangeImp1(music);}
+    public void onChange(Music music){
+
+        onChangeImp1(music);}
 
     @Override
     public void onPlayerStart(){
@@ -251,6 +259,7 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         seekBar.setProgress((int) AudioPlayer.get().getAudioPosition());
         seekBar.setSecondaryProgress(0);
         seekBar.setMax((int)music.getDuration());
+
         lastProgress = 0;
         playing_time.setText("00:00");
         max_time.setText(formatTime(music.getDuration()));

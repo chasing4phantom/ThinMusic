@@ -42,6 +42,7 @@ public class CoverLoader {
     //单例模式
     public static CoverLoader get(){return SingletonHolder.instance;}
 
+
     private static class SingletonHolder{
         private static CoverLoader instance = new CoverLoader();
     }

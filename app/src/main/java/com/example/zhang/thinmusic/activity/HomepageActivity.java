@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,7 +115,21 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         if(intent.hasExtra(Extras.EXTRA_NOTIFICATION)){
             showPlayingFragment();
             setIntent(new Intent());
+        }else{
+        String action = intent.getAction();
+        if(intent.ACTION_VIEW.equals(action)){
+        if(intent.getType().equals("audio/*")){
+            showPlayingFragment();
+            Uri data=intent.getData();
+            String path = Uri.decode(data.getEncodedPath());
+            Bundle bundle = new Bundle();
+            bundle.putString("path",path);
+            playFragment.setArguments(bundle);
+            AudioPlayer.get().searchMusicandPlay(path);
+            setIntent(new Intent());}
         }
+        }
+
     }
    /* 定时器显示*/
     @Override

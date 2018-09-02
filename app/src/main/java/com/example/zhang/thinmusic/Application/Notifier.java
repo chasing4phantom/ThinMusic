@@ -1,13 +1,23 @@
 package com.example.zhang.thinmusic.Application;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.activity.HomepageActivity;
@@ -18,12 +28,17 @@ import com.example.zhang.thinmusic.service.PlayService;
 import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.FileUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhang on 2018/4/3.
  */
 
 public class Notifier {
-    private static final int NOTIFIACTION_ID= 0x111;
+    private static final int NOTIFICATION_ID= 0x112;
+    private static final String CHANNEL_ID="0123";
+    private static final String CHANNEL__NAME="musicnotify";
     private PlayService playService;
     private NotificationManager notificationManager;
 
@@ -33,19 +48,27 @@ public class Notifier {
         private static Notifier instance = new Notifier();
     }
 
-    private Notifier(){}
+    private Notifier(){
+
+    }
 
     public void init(PlayService playService){
         this.playService = playService;
         notificationManager = (NotificationManager) playService.getSystemService(Context.NOTIFICATION_SERVICE);
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void CreateNotificationChannel(NotificationManager notificationManager){
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL__NAME,NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
+    }
     public void showPlay(Music music){
         if(music == null){
             return;
         }
-        playService.startForeground(NOTIFIACTION_ID, buildNotification(playService, music, true) );
+
+        playService.startForeground(NOTIFICATION_ID, buildNotification(playService, music, true) );
+
     }
 
     public void showPause(Music music){
@@ -53,24 +76,43 @@ public class Notifier {
             return;
         }
         playService.stopForeground(false);
-        notificationManager.notify(NOTIFIACTION_ID,buildNotification(playService,music,false));
+        notificationManager.notify(NOTIFICATION_ID,buildNotification(playService,music,false));
+        Log.d("stopNotify", "showPause: "+music.getTitle());
     }
 
     public void cancelAll(){notificationManager.cancelAll();}
 
     private Notification buildNotification(Context context,Music music,boolean isPlaying){
-        Intent intent = new Intent(context, HomepageActivity.class);
-        intent.putExtra(Extras.EXTRA_NOTIFICATION, true);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            Intent intent = new Intent(context, HomepageActivity.class);
+            intent.putExtra(Extras.EXTRA_NOTIFICATION, true);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            CreateNotificationChannel(notificationManager);
+            Notification notification = new Notification.Builder(context)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.drawable.notification)
+                    .setCustomContentView(getRemoteViews_26(context,music,isPlaying))
+                    .setChannelId(CHANNEL_ID).build();
+            return notification;
+        }else{
+            Intent intent = new Intent(context, HomepageActivity.class);
+            intent.putExtra(Extras.EXTRA_NOTIFICATION, true);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder =new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.notification)
                 .setCustomContentView(getRemoteViews(context,music,isPlaying));
+
         return builder.build();
+        }
     }
 
     private RemoteViews getRemoteViews(Context context,Music music,boolean isPlaying){
@@ -82,25 +124,138 @@ public class Notifier {
             if(cover!=null){
                 remoteViews.setImageViewBitmap(R.id.iv_icon,cover);
                 }else{
-                remoteViews.setImageViewResource(R.id.iv_icon,R.drawable.ic_launcher_background);
+                remoteViews.setImageViewResource(R.id.iv_icon,R.mipmap.thinmusic);
             }
         remoteViews.setTextViewText(R.id.tv_title, title);
         remoteViews.setTextViewText(R.id.tv_subtitle, subtitle);
 
+        boolean isLightNotificationTheme = isLightNotificationTheme(playService);
 
         Intent playIntent = new Intent(StatusBarReceiver.ACTION_STATUS_BAR);
         playIntent.putExtra(StatusBarReceiver.EXTRA, StatusBarReceiver.EXTRA_PLAY_PAUSE);
         PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setImageViewResource(R.id.iv_play_pause,R.drawable.play_bar_btn_pause);
+        remoteViews.setImageViewResource(R.id.iv_play_pause,getPlayIconRes(isLightNotificationTheme,isPlaying));
         remoteViews.setOnClickPendingIntent(R.id.iv_play_pause, playPendingIntent);
+
 
         Intent nextIntent = new Intent(StatusBarReceiver.ACTION_STATUS_BAR);
         nextIntent.putExtra(StatusBarReceiver.EXTRA, StatusBarReceiver.EXTRA_NEXT);
         PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setImageViewResource(R.id.iv_next, R.drawable.play_bar_btn_next);
+        remoteViews.setImageViewResource(R.id.iv_next, getNextIconRes(isLightNotificationTheme));
         remoteViews.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
+
         return remoteViews;
     }
+    private RemoteViews getRemoteViews_26(Context context,Music music,boolean isPlaying){
+        String title = music.getTitle();
+        String subtitle = FileUtils.getArtistAndAlbum(music.getArtist(),music.getAlbum());
+        Bitmap cover = CoverLoader.get().loadThumb(music);
+
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.notification);
+        if(cover!=null){
+            remoteViews.setImageViewBitmap(R.id.iv_icon,cover);
+        }else{
+            remoteViews.setImageViewResource(R.id.iv_icon,R.mipmap.thinmusic);
+        }
+        remoteViews.setTextViewText(R.id.tv_title, title);
+        remoteViews.setTextViewText(R.id.tv_subtitle, subtitle);
+
+        boolean isLightNotificationTheme = isLightNotificationTheme(playService);
+
+        Intent playIntent = new Intent(StatusBarReceiver.ACTION_STATUS_BAR);
+        playIntent.setComponent(new ComponentName("com.example.zhang.thinmusic","com.example.zhang.thinmusic.receiver.StatusBarReceiver"));
+        playIntent.putExtra(StatusBarReceiver.EXTRA, StatusBarReceiver.EXTRA_PLAY_PAUSE);
+        PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setImageViewResource(R.id.iv_play_pause,getPlayIconRes(isLightNotificationTheme,isPlaying));
+        remoteViews.setOnClickPendingIntent(R.id.iv_play_pause, playPendingIntent);
 
 
+        Intent nextIntent = new Intent(StatusBarReceiver.ACTION_STATUS_BAR);
+        nextIntent.setComponent(new ComponentName("com.example.zhang.thinmusic","com.example.zhang.thinmusic.receiver.StatusBarReceiver"));
+        nextIntent.putExtra(StatusBarReceiver.EXTRA, StatusBarReceiver.EXTRA_NEXT);
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setImageViewResource(R.id.iv_next, getNextIconRes(isLightNotificationTheme));
+        remoteViews.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
+
+        return remoteViews;
+    }
+    private int getPlayIconRes(boolean isLightNotificationTheme ,boolean isPlaying){
+        if(isPlaying){
+            return isLightNotificationTheme?R.drawable.ic_status_bar_pause_selector:
+                                            R.drawable.ic_status_bar_pause_light_selector;
+        }else
+        {
+            return isLightNotificationTheme?R.drawable.ic_status_bar_play_selector:
+                                            R.drawable.ic_status_bar_play_light_selector;
+        }
+    }
+
+    private int getNextIconRes(boolean isLightNotificationTheme){
+        return isLightNotificationTheme?
+                R.drawable.ic_status_bar_next_selector:
+                R.drawable.ic_status_bar_next_light_selector;
+    }
+
+    private boolean isLightNotificationTheme(Context context){
+        int notificationTextColor = getNotificationTextColor(context);
+        return isSimilarColor(Color.BLACK,notificationTextColor);
+    }
+
+    private int getNotificationTextColor(Context context){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        Notification notification = builder.build();
+        RemoteViews remoteViews = notification.contentView;
+        if(remoteViews == null){
+            return Color.BLACK;
+        }
+        int layoutId = remoteViews.getLayoutId();
+        ViewGroup notificationLayout =(ViewGroup) LayoutInflater.from(context).inflate(layoutId,null);
+        TextView title = notificationLayout.findViewById(android.R.id.title);
+        if(title!=null){
+            return title.getCurrentTextColor();
+        }else
+            return findTextColor(notificationLayout);
+    }
+
+    /**
+     * 如果通过 android.R.id.title 无法获得 title ，
+     * 则通过遍历 notification 布局找到 textSize 最大的 TextView ，应该就是 title 了。
+     */
+    private int findTextColor(ViewGroup notificationLayout) {
+        List<TextView> textViewList = new ArrayList<>();
+        findTextView(notificationLayout, textViewList);
+
+        float maxTextSize = -1;
+        TextView maxTextView = null;
+        for (TextView textView : textViewList) {
+            if (textView.getTextSize() > maxTextSize) {
+                maxTextView = textView;
+            }
+        }
+
+        if (maxTextView != null) {
+            return maxTextView.getCurrentTextColor();
+        }
+
+        return Color.BLACK;
+    }
+    private void findTextView(View view, List<TextView> textViewList){
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup = (ViewGroup) view;
+            for(int i =0; i<viewGroup.getChildCount();i++){
+                findTextView(viewGroup.getChildAt(i),textViewList);
+            }
+        }else if(view instanceof TextView){
+            textViewList.add((TextView)view);
+        }
+    }
+    private boolean isSimilarColor(int baseColor, int color) {
+        int simpleBaseColor = baseColor | 0xff000000;
+        int simpleColor = color | 0xff000000;
+        int baseRed = Color.red(simpleBaseColor) - Color.red(simpleColor);
+        int baseGreen = Color.green(simpleBaseColor) - Color.green(simpleColor);
+        int baseBlue = Color.blue(simpleBaseColor) - Color.blue(simpleColor);
+        double value = Math.sqrt(baseRed * baseRed + baseGreen * baseGreen + baseBlue * baseBlue);
+        return value < 180.0;
+    }
 }

@@ -19,18 +19,17 @@ import com.example.zhang.thinmusic.MediaSessionManager;
  */
 
 public class PlayService extends Service {
-    private static final String TAG = "Service";
-
     public class PlayBinder extends Binder{
         public PlayService getService(){return  PlayService.this;}
     }
 
     @Override
     public void onCreate(){
-        super.onCreate();
-        AudioPlayer.get().init(this);
+      super.onCreate();
+      AudioPlayer.get().init(this);
       MediaSessionManager.get().init(this);
       QuitTimer.get().init(this);
+      Notifier.get().init(this);
     }
 
     @Nullable

@@ -1,22 +1,31 @@
 package com.example.zhang.thinmusic.utils;
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 
+import com.example.zhang.thinmusic.Application.Notifier;
 import com.example.zhang.thinmusic.PlayModeEnum;
+import com.example.zhang.thinmusic.fragments.PlayFragment;
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.receiver.NosiyAudioStreamReceiver;
+import com.example.zhang.thinmusic.service.AudioFocusManager;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.storage.DBManager;
 import com.example.zhang.thinmusic.MediaSessionManager;
+import com.example.zhang.thinmusic.storage.greendao.MusicDao;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 
@@ -34,6 +43,9 @@ public class AudioPlayer {
 
     private Context context;
     private MediaPlayer mediaPlayer;
+    private AudioFocusManager audioFocusManager;
+    private NosiyAudioStreamReceiver nosiyAudioStreamReceiver;
+    private IntentFilter nosiyfilter;
     private Handler handler;
     private List<Music> musicList;
     private  final List<OnPlayerListener> listeners = new ArrayList<>();
@@ -52,7 +64,10 @@ public class AudioPlayer {
     public void init(Context context) {
         this.context = context.getApplicationContext();
         musicList = DBManager.get().getMusicDao().queryBuilder().build().list();
+        audioFocusManager = new AudioFocusManager(context);
         mediaPlayer = new MediaPlayer();
+        nosiyAudioStreamReceiver = new NosiyAudioStreamReceiver();
+        nosiyfilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         handler = new Handler(Looper.getMainLooper());
         mediaPlayer.setOnCompletionListener(mp ->next());
         mediaPlayer.setOnPreparedListener(mp ->{
@@ -80,12 +95,15 @@ public class AudioPlayer {
         int position = musicList.indexOf(music);
         if(position < 0){
             musicList.add(music);
-            DBManager.get().getMusicDao().insert(music);
+            //DBManager.get().getMusicDao().insert(music);
             position = musicList.size() - 1;
         }
-        Log.i(String.valueOf(music.getFileName()), "addAndPlay: ");
+        Log.d("title", "addAndPlay: "+music.getTitle());
+
         play(position);
     }
+
+
     public void play(int position){
         if(musicList.isEmpty()){
             return;
@@ -97,9 +115,8 @@ public class AudioPlayer {
         }
 
         setPlayPosition(position);
-        Log.d("position = ", String.valueOf(position));
         Music music = getPlayMusic();
-        Log.d(music.getFileName(), "play() returned: " + getPlayMusic());
+
         try{
             mediaPlayer.reset();
             mediaPlayer.setDataSource(music.getPath());
@@ -108,7 +125,7 @@ public class AudioPlayer {
             for(OnPlayerListener listener :listeners){
                 listener.onChange(music);
             }
-            /*Notifier.get().showPlay(music);*/
+            Notifier.get().showPlay(music);
             MediaSessionManager.get().updateMetaData(music);
             MediaSessionManager.get().updatePlaybackState();
         } catch(IOException e){
@@ -149,18 +166,21 @@ public class AudioPlayer {
         }
     }
 
-    public  void startPlayer(){
-        if(!isPreparing() && !isPausing()){
+    public  void startPlayer() {
+        if (!isPreparing() && !isPausing()) {
             return;
         }
-        mediaPlayer.start();
-        state = STATE_PLAYING;
-        handler.post(mPublishRunnable);
-        /*Notifier.get().showPlay(getPlayMusic());*/
-        MediaSessionManager.get().updatePlaybackState();
-        for(OnPlayerListener listener : listeners){
-            listener.onPlayerStart();
+        if (audioFocusManager.requestAudioFocus()) {
+            mediaPlayer.start();
+            state = STATE_PLAYING;
+            handler.post(mPublishRunnable);
+            Notifier.get().showPlay(getPlayMusic());
+            MediaSessionManager.get().updatePlaybackState();
+            context.registerReceiver(nosiyAudioStreamReceiver,nosiyfilter);
+            for (OnPlayerListener listener : listeners) {
+                listener.onPlayerStart();
 
+            }
         }
     }
     public void pausePlayer(){pausePlayer(true);}
@@ -172,8 +192,12 @@ public class AudioPlayer {
         mediaPlayer.pause();
         state = STATE_PAUSE;
         handler.removeCallbacks(mPublishRunnable);
-        //Notifier.get().showPause(getPlayMusic());
+        Notifier.get().showPause(getPlayMusic());
         MediaSessionManager.get().updatePlaybackState();
+        context.unregisterReceiver(nosiyAudioStreamReceiver);
+        if(abandAudioFocus){
+            audioFocusManager.abandonAudioFocus();
+        }
         for(OnPlayerListener listener : listeners){
             listener.onPlayerPause();
         }
@@ -290,4 +314,36 @@ public class AudioPlayer {
     }
 
     private  void  setPlayPosition(int position){Preferences.savePlayPosition(position);}
+
+
+   /*"用其他应用打开"音乐时，从uri查询到music对象播放*/
+   public void searchMusicandPlay(String path){
+
+
+       Music music = handlepath(path);
+       try{
+           mediaPlayer.reset();
+           mediaPlayer.setDataSource(music.getPath());
+           mediaPlayer.prepareAsync();
+           state = STATE_PREPARING;
+           for(OnPlayerListener listener :listeners){
+               listener.onChange(music);
+           }
+           Notifier.get().showPlay(music);
+           MediaSessionManager.get().updateMetaData(music);
+           MediaSessionManager.get().updatePlaybackState();
+       } catch(IOException e){
+           e.printStackTrace();
+           ToastUtils.show("当前歌曲无法播放");
+       }
+   }
+    public Music handlepath(String path){
+        String temp = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
+       String temp1 = temp.substring(temp.indexOf(" ")+1);
+        String temp2 = temp1.substring(temp1.indexOf(' ')+1);
+        Log.d("temp2", "handlepath:"+ temp2);
+        List<Music> musicresult = DBManager.get().getMusicDao().queryBuilder().where(MusicDao.Properties.Title.eq(temp2)).list();
+        Music music = musicresult.get(0);
+        return music;
+    }
 }

@@ -26,6 +26,7 @@ import com.example.zhang.thinmusic.adapter.PlaylistAdapter;
 import com.example.zhang.thinmusic.adapter.onClick;
 import com.example.zhang.thinmusic.constants.Keys;
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.storage.DBManager;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
 import com.example.zhang.thinmusic.utils.MusicUtils;
@@ -88,6 +89,9 @@ public class LocalMusicFragment extends BaseFragment implements onClick,OnMoreCl
                     protected void onPostExecute(List<Music> musicList) {
                         AppCache.get().getLocalMusicList().clear();
                         AppCache.get().getLocalMusicList().addAll(musicList);
+                        for( Music music : musicList){
+                            DBManager.get().getMusicDao().insert(music);
+                        }
                         LocalMusic.setVisibility(View.VISIBLE);
                         adapter.notifyDataSetChanged();
                     }
@@ -113,7 +117,7 @@ public class LocalMusicFragment extends BaseFragment implements onClick,OnMoreCl
         public void onMoreClick ( final int position){
             Music music = AppCache.get().getLocalMusicList().get(position);
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-            dialog.setTitle(music.getTitle());
+            dialog.setTitle(music .getTitle());
             dialog.setItems(R.array.local_music_dialog, (dialog1, which) -> {
                 switch (which) {
                     case 0:

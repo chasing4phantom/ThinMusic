@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.zhang.thinmusic.model.ListInfo;
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.storage.DBManager;
 import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.Preferences;
 import com.example.zhang.thinmusic.utils.ScreenUtils;
@@ -45,7 +46,13 @@ public class AppCache {
     }
     public Context getContext(){return  context;}
 
-    public List<Music> getLocalMusicList(){return LocalList;}
+    public List<Music> getLocalMusicList(){
+        if(LocalList ==null){
+        List<Music> musicList = DBManager.get().getMusicDao().loadAll();
+        for(Music music:musicList)
+        LocalList.add(music);}
+
+        return LocalList;}
 
     public List<ListInfo> getSongList(){return Songlist;}
 

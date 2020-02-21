@@ -50,6 +50,28 @@
         <item>欧美金曲榜</item>
     </string-array>
 
+    <string-array name="netease_music_list_title">
+        <item>我喜欢的音乐</item>
+        <item>Taylor Swift 泰勒斯威夫特 官方歌曲全集</item>
+        <item>fafafafaer喜欢的音乐</item>
+        <item>#</item>
+        <item>云音乐飙升榜</item>
+        <item>云音乐新歌榜</item>
+        <item>网易原创歌曲榜</item>
+        <item>云音乐热歌榜</item>
+        <item>#</item>
+        <item>UK排行榜周榜</item>
+        <item>美国Billboard周榜</item>
+        <item>iTUnes榜</item>
+        <item>日本Oricon周榜</item>
+    </string-array>
+    
+    <string-array name="netease_musiclist_category">
+        <item>我的歌单</item>
+        <item>官方榜</item>
+        <item>全球榜</item>
+    </string-array>
+
     <string-array name="online_music_list_type">
         <item>#</item>
         <item>8</item>
@@ -61,6 +83,22 @@
         <item>20</item>
         <item>21</item>
 
+    </string-array>
+
+    <string-array name="netease_music_list_id">
+        <item>88544597</item>
+        <item>711892958</item>
+        <item>17281445</item>
+        <item>#</item>
+        <item>19723756</item>
+        <item>3779629</item>
+        <item>2884035</item>
+        <item>3778678</item>
+        <item>#</item>
+        <item>180106</item>
+        <item>60198</item>
+        <item>11641012</item>
+        <item>60131</item>
     </string-array>
 
     <string-array name="filter_size_entry_values">

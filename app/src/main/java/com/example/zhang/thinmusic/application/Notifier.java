@@ -1,4 +1,4 @@
-package com.example.zhang.thinmusic.Application;
+package com.example.zhang.thinmusic.application;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,8 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.example.zhang.thinmusic.Application;
+package com.example.zhang.thinmusic.application;
 
 import android.app.Activity;
 import android.app.Application;
@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.zhang.thinmusic.model.ListInfo;
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.model.NeteaseListInfo;
 import com.example.zhang.thinmusic.storage.DBManager;
 import com.example.zhang.thinmusic.utils.CoverLoader;
 import com.example.zhang.thinmusic.utils.Preferences;
@@ -25,6 +26,8 @@ public class AppCache {
     public Context context;
     private final List<Music> LocalList = new ArrayList<>();
     private final List<ListInfo> Songlist = new ArrayList<>();
+    private final List<NeteaseListInfo> NeteaseSongList = new ArrayList<>();
+    private final List<List<NeteaseListInfo>>   NeteaseSongLists = new ArrayList<>();
     private final List<Activity> ActivityStack = new ArrayList<>();
 
     private AppCache(){
@@ -55,6 +58,10 @@ public class AppCache {
         return LocalList;}
 
     public List<ListInfo> getSongList(){return Songlist;}
+
+    public List<NeteaseListInfo>  getNeteaseSongList(){return NeteaseSongList;}
+
+    public List<List<NeteaseListInfo>> getNeteaseSongLists(){return NeteaseSongLists;}
 
     public void clearStack(){
         List<Activity> activityStack = ActivityStack;

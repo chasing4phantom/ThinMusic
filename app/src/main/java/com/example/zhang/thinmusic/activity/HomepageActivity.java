@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +27,7 @@ import com.example.zhang.thinmusic.adapter.FragmentAdapter;
 import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.constants.Keys;
 import com.example.zhang.thinmusic.fragments.LocalMusicFragment;
+import com.example.zhang.thinmusic.fragments.NeteaseListFragment;
 import com.example.zhang.thinmusic.fragments.NetlistFragment;
 import com.example.zhang.thinmusic.fragments.PlayFragment;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
@@ -48,6 +49,8 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
     private TextView LocalMusic;
     @Bind(R.id.net_music)
     private TextView NetMusic;
+    @Bind(R.id.netease_music)
+    private TextView NeteaseMusic;
     @Bind(R.id.iv_menu)
     private ImageView menu;
     @Bind(R.id.viewpager)
@@ -58,6 +61,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
     private View NavigationHeader;
     private LocalMusicFragment localMusicFragment;
     private NetlistFragment netMusicFragment;
+    private NeteaseListFragment neteaseListFragment;
     private PlayFragment playFragment;
     private ControlPanel controlPanel;
     private NaviMenuExcuter naviMenuExcuter;
@@ -95,15 +99,18 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         //初始化碎片，并默认显示localmusic
         localMusicFragment = new LocalMusicFragment();
         netMusicFragment = new NetlistFragment();
+        neteaseListFragment = new NeteaseListFragment();
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(localMusicFragment);
         adapter.addFragment(netMusicFragment);
+        adapter.addFragment(neteaseListFragment);
         viewPager.setAdapter(adapter);
         LocalMusic.setSelected(true);
 
         //绑定按键监听
         LocalMusic.setOnClickListener(this);
         NetMusic.setOnClickListener(this);
+        NeteaseMusic.setOnClickListener(this);
         menu.setOnClickListener(this);
         Playbar.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
@@ -152,6 +159,9 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
             case R.id.net_music:
                 viewPager.setCurrentItem(1);
                 break;
+            case R.id.netease_music:
+                viewPager.setCurrentItem(2);
+                break;
             case R.id.play_bar:
                 showPlayingFragment();
                 break;
@@ -169,7 +179,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
 
     }
         @Override
-       public void onPageScrolled(int position,float positionOffset,int positionOffsetPixels){
+                public void onPageScrolled(int position,float positionOffset,int positionOffsetPixels){
 
         }
 
@@ -178,10 +188,17 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
            if(position == 0){
                LocalMusic.setSelected(true);
                NetMusic.setSelected(false);
+               NeteaseMusic.setSelected(false);
            }
-           else{
+           else if(position ==1){
                LocalMusic.setSelected(false);
                NetMusic.setSelected(true);
+               NeteaseMusic.setSelected(false);
+           }
+           else if(position ==2){
+               LocalMusic.setSelected(false);
+               NetMusic.setSelected(false);
+               NeteaseMusic.setSelected(true);
            }
         }//布局切换
 
@@ -207,7 +224,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void hidePlayingFragment(){
-        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(0,R.anim.fragment_slide_down);
         ft.hide(playFragment);
         ft.commitAllowingStateLoss();
@@ -235,6 +252,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
         outState.putInt(Keys.VIEW_PAGER_INDEX,viewPager.getCurrentItem());
         localMusicFragment.onSaveInstanceState(outState);
         netMusicFragment.onSaveInstanceState(outState);
+        neteaseListFragment.onSaveInstanceState(outState);
 
     }
    /* 数据恢复*/
@@ -244,6 +262,7 @@ public class HomepageActivity extends BaseActivity implements View.OnClickListen
             viewPager.setCurrentItem(saveInstanceState.getInt(Keys.VIEW_PAGER_INDEX),false);
             localMusicFragment.onRestoreInstanceState(saveInstanceState);
             netMusicFragment.onRestoreInstanceState(saveInstanceState);
+            neteaseListFragment.onRestoreInstanceState(saveInstanceState);
         });
     }
 

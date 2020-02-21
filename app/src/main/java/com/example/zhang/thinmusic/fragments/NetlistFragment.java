@@ -2,16 +2,15 @@ package com.example.zhang.thinmusic.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.zhang.thinmusic.Application.AppCache;
+import com.example.zhang.thinmusic.application.AppCache;
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.activity.NetMusicfActivity;
 import com.example.zhang.thinmusic.adapter.NetListAdapter;

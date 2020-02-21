@@ -3,6 +3,7 @@
     <string name="play_time_start">00:00</string>
     <string name="local_music">我的音乐</string>
     <string name="net_music">网络音乐</string>
+    <string name="netease_music">网易云音乐</string>
     <string name="setting_key_filter_size">filter_size</string>
     <string name="setting_key_filter_time">filter_time</string>
     <string name="song_list_item_title_1">1.%1$s - %2$s</string>

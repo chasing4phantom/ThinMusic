@@ -9,7 +9,7 @@ import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.zhang.thinmusic.model.Music;
 

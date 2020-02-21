@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.text.format.DateUtils;
 
 
-import com.example.zhang.thinmusic.Application.AppCache;
+import com.example.zhang.thinmusic.application.AppCache;
 import com.example.zhang.thinmusic.constants.Action;
 
 

@@ -16,7 +16,7 @@ import org.greenrobot.greendao.database.Database;
 public class DBManager {
     private  static final String DB_NAME = "database";
     private MusicDao musicDao;
-    private static  DaoMaster daoMaster;
+    private static DaoMaster daoMaster;
     private static DaoSession daoSession;
     //单例模式
     public static DBManager get(){return  SingletonHolder.instance;}

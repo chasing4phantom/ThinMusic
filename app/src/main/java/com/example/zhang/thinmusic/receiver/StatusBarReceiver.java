@@ -21,7 +21,6 @@ public class StatusBarReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent == null || TextUtils.isEmpty(intent.getAction())) {
-            Log.d("fuck!", "onReceive: 77777777777777777777");
             return;
         }
 

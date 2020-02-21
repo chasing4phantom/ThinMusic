@@ -5,15 +5,13 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 
-import com.example.zhang.thinmusic.Application.Notifier;
+import com.example.zhang.thinmusic.application.Notifier;
 import com.example.zhang.thinmusic.PlayModeEnum;
-import com.example.zhang.thinmusic.fragments.PlayFragment;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.receiver.NosiyAudioStreamReceiver;
 import com.example.zhang.thinmusic.service.AudioFocusManager;
@@ -25,7 +23,6 @@ import com.example.zhang.thinmusic.storage.greendao.MusicDao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 
 

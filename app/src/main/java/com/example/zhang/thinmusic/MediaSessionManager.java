@@ -1,12 +1,12 @@
 package com.example.zhang.thinmusic;
 
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
+
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import com.example.zhang.thinmusic.Application.AppCache;
+import com.example.zhang.thinmusic.application.AppCache;
 import com.example.zhang.thinmusic.model.Music;
 import com.example.zhang.thinmusic.service.PlayService;
 import com.example.zhang.thinmusic.utils.AudioPlayer;

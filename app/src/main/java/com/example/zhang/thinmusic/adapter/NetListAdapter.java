@@ -102,6 +102,7 @@ public class NetListAdapter extends BaseAdapter{
             HttpClient.getSongListInfo(listInfo.getType(),3,0,new HttpCallback<OnLineMusicList>(){
                 @Override
                 public void onSuccess(OnLineMusicList response){
+                    Log.d("net_response", "onSuccess: "+response.toString());
                     if(response == null || response.getSong_list() == null){
                         return;
                     }

@@ -13,10 +13,5 @@
     <style name="AppTheme" parent="AppBaseTheme" />
 
 
-
-    <style name="AppTheme.Search" parent="AppBaseTheme">
-        <item name="colorAccent">@color/white</item>
-    </style>
-
     <style name="AppTheme.Text" parent="TextAppearance.AppCompat" />
 </resources>

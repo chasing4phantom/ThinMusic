@@ -13,6 +13,22 @@ public class NeteaseLyric {
         private String lyric;
         @SerializedName("version")
         private String version;
+
+        public String getLyric() {
+            return lyric;
+        }
+
+        public void setLyric(String lyric) {
+            this.lyric = lyric;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
     }
 
     public String getCode() {

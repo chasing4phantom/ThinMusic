@@ -47,6 +47,42 @@ public class NeteaseMusicList {
         private String name;
         @SerializedName("id")
         private String id;
+        @SerializedName("tracks")
+        private List<NeteaseMusic> tracks;
+
+        @SerializedName("creator")
+        private Creator creator;
+
+        public static class Creator{
+            @SerializedName("pronvince")
+            String province;
+            @SerializedName("avatarUrl")
+            String avatarUrl;//作者头像
+            @SerializedName("nickname")
+            String nickname;//昵称
+            @SerializedName("signature")
+            String signature;
+            @SerializedName("backgroundUrl")
+            String backgroundUrl;
+        }
+
+
+
+        public Creator getCreator() {
+            return creator;
+        }
+
+        public void setCreator(Creator creator) {
+            this.creator = creator;
+        }
+
+        public List<NeteaseMusic> getTracks() {
+            return tracks;
+        }
+
+        public void setTracks(List<NeteaseMusic> tracks) {
+            this.tracks = tracks;
+        }
 
         public String getCreateTime() {
             return createTime;
@@ -121,39 +157,5 @@ public class NeteaseMusicList {
         }
     }
 
-    @SerializedName("creator")
-    private Creator creator;
-
-    public static class Creator{
-        @SerializedName("pronvince")
-        String province;
-        @SerializedName("avatarUrl")
-        String avatarUrl;//作者头像
-        @SerializedName("nickname")
-        String nickname;//昵称
-        @SerializedName("signature")
-        String signature;
-        @SerializedName("backgroundUrl")
-        String backgroundUrl;
-    }
-
-    @SerializedName("tracks")
-    private List<NeteaseMusic> tracks;
-
-    public Creator getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Creator creator) {
-        this.creator = creator;
-    }
-
-    public List<NeteaseMusic> getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(List<NeteaseMusic> tracks) {
-        this.tracks = tracks;
-    }
 
 }

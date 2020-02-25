@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
@@ -31,7 +32,7 @@ public  class CanScrollHorizonView extends HorizontalScrollView implements View.
     }
 /*        条目点击的回调*/
     public interface OnItemClickListener{
-        void onClick(View view,int position);
+        void onClick(View view, int position);
 }
     private CurrentCardChangeListener mListener;
 
@@ -185,7 +186,7 @@ public  class CanScrollHorizonView extends HorizontalScrollView implements View.
 
 
     @Override
-    public void onClick(View view){
+    public void onClick( View view){
         if(onItemClickListener!=null){
             onItemClickListener.onClick(view,mViewPosition.get(view));
         }

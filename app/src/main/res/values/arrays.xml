@@ -9,15 +9,6 @@
         <item>分享</item>
     </string-array>
 
-    <string-array name="search_music_dialog">
-        <item>分享</item>
-        <item>下载</item>
-    </string-array>
-
-    <string-array name="search_music_dialog_no_download">
-        <item>分享</item>
-    </string-array>
-
     <string-array name="timer_text">
         <item>不开启</item>
         <item>10分钟后</item>
@@ -101,21 +92,4 @@
         <item>60131</item>
     </string-array>
 
-    <string-array name="filter_size_entry_values">
-        <item>0</item>
-        <item>100</item>
-        <item>200</item>
-        <item>500</item>
-        <item>1024</item>
-        <item>2048</item>
-    </string-array>
-
-    <string-array name="filter_time_entry_values">
-        <item>0</item>
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>90</item>
-        <item>120</item>
-    </string-array>
 </resources>

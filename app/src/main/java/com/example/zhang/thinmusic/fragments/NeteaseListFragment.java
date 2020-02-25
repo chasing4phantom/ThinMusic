@@ -99,10 +99,10 @@ public class NeteaseListFragment extends BaseFragment implements AdapterView.OnI
     }
 
     public void onRestoreInstanceState(final Bundle savedInstancedState){
-        NeteasePlayList.post(()->{
+/*        NeteasePlayList.post(()->{
             int position = savedInstancedState.getInt(Keys.PLAYLIST_POSITION);
             //int offset
-        });
+        });*/
     }
 
 }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">ThinMusic</string>
-    <string name="play_time_start">00:00</string>
     <string name="local_music">我的音乐</string>
     <string name="net_music">网络音乐</string>
     <string name="netease_music">网易云音乐</string>

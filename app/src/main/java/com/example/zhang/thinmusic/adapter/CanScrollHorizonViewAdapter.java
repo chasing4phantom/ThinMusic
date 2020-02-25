@@ -24,6 +24,7 @@ public class CanScrollHorizonViewAdapter {
     private Context mContext;
     private LayoutInflater inflater;
     private List<NeteaseListInfo> mdata;
+    private final int OFFSET=0;
 
     public CanScrollHorizonViewAdapter(Context context, List<NeteaseListInfo> data){
         this.mContext = context;

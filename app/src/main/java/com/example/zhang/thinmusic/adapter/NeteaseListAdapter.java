@@ -1,15 +1,19 @@
 package com.example.zhang.thinmusic.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zhang.thinmusic.R;
+import com.example.zhang.thinmusic.activity.NeteaseMusicActivity;
+import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.model.NeteaseListInfo;
 import com.example.zhang.thinmusic.utils.Bind;
 import com.example.zhang.thinmusic.utils.ViewBinder;
@@ -92,8 +96,11 @@ public class NeteaseListAdapter extends BaseAdapter {
         });
         holderMusicList.scrollHorizonView.setOnItemClickListener(new CanScrollHorizonView.OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-
+            public void onClick(View view, int position1) {
+                NeteaseListInfo neteaseListInfo = mdata.get(position).get(position1);
+        Intent intent = new Intent(view.getContext(), NeteaseMusicActivity.class);
+        intent.putExtra(Extras.NETEASE_LIST_ID,neteaseListInfo);
+        mContext.startActivity(intent);
             }
         });
         holderMusicList.netease_songlist_divider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.INVISIBLE);

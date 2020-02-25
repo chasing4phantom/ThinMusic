@@ -3,10 +3,13 @@ package com.example.zhang.thinmusic.http;
 import android.util.Log;
 
 import com.example.zhang.thinmusic.model.NeteaseLyric;
+import com.example.zhang.thinmusic.model.NeteaseMusic;
 import com.example.zhang.thinmusic.model.NeteaseMusicList;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -25,6 +28,7 @@ public class HttpClient2Netease {
     private static final String TYPE_GETARTIST="artist";
     private static final String TYPE_SEARCH="search";
     private static final String TYPE_ALBUM="album";
+    private static final String PARAM_OFFSET="offset";
 
 /*    配置okhttpclient*/
     static {
@@ -89,5 +93,54 @@ public class HttpClient2Netease {
                 });
     }
 
+    public static void getNeteaseMusicDownload(String songid, @NonNull final HttpCallback<NeteaseMusic> callback){
+        OkHttpUtils.get().url(BASE_URL)
+                .addParams(PARAM_TYPE,TYPE_GETSONG)
+                .addParams(PARAM_ID,songid)
+                .build()
+                .execute(new JsonCallback<NeteaseMusic>(NeteaseMusic.class) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onResponse(NeteaseMusic response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onAfter(int id){
+                        callback.onFinish();
+                    }
+                });
+    }
+    public static void downloadFile(String url, String destFileDir, String destFileName, @NonNull HttpCallback<File> callback){
+        OkHttpUtils.get().url(url).build()
+                .execute(new FileCallBack(destFileDir,destFileName) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        if(callback!=null){
+                            callback.onFail(e);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(File response, int id) {
+                        if(callback!=null){
+                            callback.onSuccess(response);
+                        }
+                    }
+                    @Override
+                    public void inProgress(float progress,long total,int id){
+
+                    }
+                    @Override
+                    public void onAfter(int id){
+                        if(callback!=null){
+                            callback.onFinish();
+                        }
+                    }
+                });
+    }
     //public static void searchNeteaseMusic(String keyword,@NonNull final HttpCallback<SearchResult>)
 }

@@ -128,8 +128,11 @@ public class CoverLoader {
             return String.valueOf(music.getAlbumId());
         } else if (music.getType() == Music.Type.ONLINE && !TextUtils.isEmpty(music.getCoverPath())) {
             return music.getCoverPath();
-        } else {
-            return null;
+        } else if(music.getType()==Music.Type.NETEASE && !TextUtils.isEmpty(music.getCoverPath())){
+            return  music.getCoverPath();
+        }
+         else{
+             return null;
         }
     }
 
@@ -150,6 +153,8 @@ public class CoverLoader {
         Bitmap bitmap;
         if(music.getType() == Music.Type.LOCAL){
             bitmap = loadCoverFromMediaStore(music.getAlbumId());
+        }else if(music.getType()==Music.Type.ONLINE){
+            bitmap = loadCoverFromFile(music.getCoverPath());
         }else {
             bitmap = loadCoverFromFile(music.getCoverPath());
         }

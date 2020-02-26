@@ -36,7 +36,7 @@ public class AboutActivity extends BaseActivity{
             Version = findPreference("version");
             github = findPreference("github");
 
-            Version.setSummary("v" + BuildConfig.VERSION_NAME);
+            Version.setSummary("v" + BuildConfig.VERSION_NAME+"."+BuildConfig.VERSION_CODE);
             setListener();
         }
 

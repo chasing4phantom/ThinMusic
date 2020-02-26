@@ -71,6 +71,7 @@ public class Music implements Serializable {
     public interface Type{
                 int LOCAL = 0;
                 int ONLINE =1;
+                int NETEASE =2;
     }
     @Override
     public boolean equals(Object o){

@@ -21,7 +21,10 @@ import com.example.zhang.thinmusic.PlayModeEnum;
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.adapter.PlaypageAdapter;
 import com.example.zhang.thinmusic.executor.SearchLrc;
+import com.example.zhang.thinmusic.http.HttpCallback;
+import com.example.zhang.thinmusic.http.HttpClient2Netease;
 import com.example.zhang.thinmusic.model.Music;
+import com.example.zhang.thinmusic.model.NeteaseLyric;
 import com.example.zhang.thinmusic.service.OnPlayerListener;
 import com.example.zhang.thinmusic.utils.AudioPlayer;
 import com.example.zhang.thinmusic.utils.Bind;
@@ -137,7 +140,8 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
         mAlbumCoverView.initNeedle(AudioPlayer.get().isPlaying());
 
         mLrcView = lrcview.findViewById(R.id.lrc_view);
-        mLrcView.setOnPlayClickListener(this::onPlayClick);
+        //mLrcView.setOnPlayClickListener(this::onPlayClick);
+        mLrcView.setDraggable(true,this::onPlayClick);
         ViewPagerContent = new ArrayList<>(2);
         ViewPagerContent.add(coverView);
         ViewPagerContent.add(lrcview);
@@ -168,9 +172,12 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
     public void onPublish(int progress){
         if(!isdraggingprogress){
             seekBar.setProgress(progress);
-        }
+        }//拖动进度条更新进度
 
-    }//拖动进度条更新进度
+        if(mLrcView.hasLrc()){
+            mLrcView.updateTime(progress);
+        }//歌词滚动
+    }
 
     @Override
     public void onBufferingUpdate(int percent){
@@ -233,6 +240,9 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
                 int progress = seekBar1.getProgress();
                 AudioPlayer.get().seekTo(progress);
 
+                if(mLrcView.hasLrc()){
+                    mLrcView.updateTime(progress);
+                }
 
             }
         }
@@ -352,16 +362,34 @@ public class PlayFragment extends BaseFragment implements View.OnClickListener,
                     }
                 }.execute();
             }
-        }else{
+        }
+        else if(music.getType() == Music.Type.ONLINE){
             String lrcPath= FileUtils.getLrcDir()+FileUtils.getLrcFileName(music.getArtist(),music.getTitle());
-            Log.d( "setLrc: ",lrcPath);
+            //Log.d( "setLrc: ",lrcPath);
             loadLrc(lrcPath);
+        }else if(music.getType()==Music.Type.NETEASE){
+            HttpClient2Netease.getNeteaseMusicLyric(Long.toString(music.getSongId()), new HttpCallback<NeteaseLyric>() {
+                @Override
+                public void onSuccess(NeteaseLyric neteaseLyric) {
+                    String lrc = neteaseLyric.getLrc().getLyric();
+                    //Log.d("setLrc", "onSuccess: "+lrc);
+                    load_Lrc(lrc);
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
     private void loadLrc(String path){
         File file =new File(path);
         mLrcView.loadLrc(file);
+    }
+    private void load_Lrc(String lrc){
+        mLrcView.loadLrc(lrc);
     }
 
     private void setLrcLabel(String label){

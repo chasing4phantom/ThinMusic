@@ -16,7 +16,7 @@
         </PreferenceCategory>
         <PreferenceCategory android:title="关于版权">
             <Preference
-                android:summary="百度音乐"
+                android:summary="百度音乐  网易云音乐"
                 android:title="在线服务"/>
         </PreferenceCategory>
 

@@ -91,9 +91,9 @@ public class NeteaseListFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     public void onSaveInstanceState(Bundle outState){
-        int position = NeteasePlayList.getFirstVisiblePosition();
+        //int position = NeteasePlayList.getFirstVisiblePosition();
         //int offset
-        outState.putInt(Keys.PLAYLIST_POSITION,position);
+        //outState.putInt(Keys.PLAYLIST_POSITION,position);
         //outState.putInt(offset);
 
     }

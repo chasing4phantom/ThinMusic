@@ -64,7 +64,7 @@ public class NeteaseListFragment extends BaseFragment implements AdapterView.OnI
 
                     }
                 }
-                Log.d("SongList", "onActivityCreated: "+SongList.get(0).getTitle()+"   "+SongList.get(1).getTitle()+"    "+SongList.get(2).getTitle());
+                //Log.d("SongList", "onActivityCreated: "+SongList.get(0).getTitle()+"   "+SongList.get(1).getTitle()+"    "+SongList.get(2).getTitle());
                 listclone.addAll(SongList);
                 SongLists.add(listclone);
                 SongList.clear();

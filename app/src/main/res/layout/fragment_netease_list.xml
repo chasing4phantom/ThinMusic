@@ -8,7 +8,8 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:divider="@null"
-        android:paddingBottom="57dp">
+        android:paddingBottom="57dp"
+        android:background="@android:color/transparent">
 
     </ListView>
 </FrameLayout>

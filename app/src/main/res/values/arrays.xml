@@ -59,7 +59,7 @@
     
     <string-array name="netease_musiclist_category">
         <item>我的歌单</item>
-        <item>官方榜</item>
+        <item>云音乐官方榜</item>
         <item>全球榜</item>
     </string-array>
 

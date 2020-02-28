@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.zhang.thinmusic.R;
 import com.example.zhang.thinmusic.activity.NeteaseMusicActivity;
+import com.example.zhang.thinmusic.application.AppCache;
 import com.example.zhang.thinmusic.constants.Extras;
 import com.example.zhang.thinmusic.model.NeteaseListInfo;
 import com.example.zhang.thinmusic.utils.Bind;
@@ -28,6 +29,7 @@ public class NeteaseListAdapter extends BaseAdapter {
     private List<List<NeteaseListInfo>> mdata;
 
     private CanScrollHorizonViewAdapter canScrollHorizonViewAdapter;
+    private String[] categorys = AppCache.get().getContext().getResources().getStringArray(R.array.netease_musiclist_category);
     private static final int TYPE_PROFILE = 0;
     private static final int TYPE_MUSICLIST = 1;
 
@@ -55,21 +57,11 @@ public class NeteaseListAdapter extends BaseAdapter {
         return getItemViewType(postion) == TYPE_MUSICLIST;
     }
 
-/*    @Override
-    public int getItemViewType(int position){
-        if(mdata.get(position).getType().equals("#")){
-            return TYPE_PROFILE;
-        }else{
-            return TYPE_MUSICLIST;
-        }
-    }
-
-    @Override
-    public int getViewTypeCount(){return 2;}*/
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         mContext = parent.getContext();
+        String category = categorys[position];
         List<NeteaseListInfo> neteaseListInfoList = mdata.get(position);
         CanScrollHorizonViewAdapter adapter= new CanScrollHorizonViewAdapter(mContext,neteaseListInfoList);
         //NeteaseListInfo neteaseListInfo = mdata.get(position);
@@ -103,7 +95,8 @@ public class NeteaseListAdapter extends BaseAdapter {
         mContext.startActivity(intent);
             }
         });
-        holderMusicList.netease_songlist_divider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.INVISIBLE);
+        //holderMusicList.netease_songlist_divider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.INVISIBLE);
+        holderMusicList.netease_songlist_category.setText(category);
         holderMusicList.scrollHorizonView.initDatas(adapter,neteaseListInfoList.size());
         return convertView;
     }
@@ -175,9 +168,11 @@ public class NeteaseListAdapter extends BaseAdapter {
     private static class ViewHolderMusicList {
 
 
-        @Bind(R.id.netease_songlist_divider)
-        private View netease_songlist_divider;
+        /*@Bind(R.id.netease_songlist_divider)
+        private View netease_songlist_divider;*/
 
+        @Bind(R.id.netease_songlist_category)
+        private TextView netease_songlist_category;
         @Bind(R.id.scrollcardview)
         private CanScrollHorizonView scrollHorizonView;
         //private List<cardview> cardviews;

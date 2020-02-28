@@ -168,7 +168,7 @@ public  class CanScrollHorizonView extends HorizontalScrollView implements View.
     public boolean onTouchEvent(MotionEvent motionEvent){
         switch (motionEvent.getAction()){
             case MotionEvent.ACTION_MOVE:
-                Log.e(TAG, "onTouchEVENT: getScrollx():"+getScrollX() );
+                //Log.e(TAG, "onTouchEVENT: getScrollx():"+getScrollX() );
 
                 int scrollx = getScrollX();
                 if(scrollx>=childWidth)//滑动的距离大于item的宽度，加载下一个card，移除第一个card
